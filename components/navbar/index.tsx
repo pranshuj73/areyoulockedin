@@ -1,0 +1,16 @@
+import { Button } from "@/components/ui/button";
+import ThemeToggleButton from "./theme-toggle-btn";
+
+export default function Navbar() {
+  return (
+    <nav className="fixed top-0 left-0 h-18 w-full backdrop-blur-3xl flex justify-between items-center p-4 border-b-2 border-dashed z-50">
+      <h1 className="text-lg font-semibold">areyoulockedin?</h1>
+      <div className="flex items-center justify-center gap-4">
+        <Button variant="outline">
+          Launching Soon!
+        </Button>
+        <ThemeToggleButton />
+      </div>
+    </nav>
+  )
+}
