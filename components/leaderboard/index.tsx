@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -11,9 +10,8 @@ import {
 export default function Leaderboard() {
   return (
     <section className="text-lg">
-      <h1 className="font-semibold text-xl mb-4">Leaderboard</h1>
+      <h1 className="font-semibold text-xl mb-4">Today's Leaderboard</h1>
       <Table>
-        <TableCaption className="mt-18">areyoulockedin? received 69420 requests today.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">Position</TableHead>
@@ -31,7 +29,7 @@ export default function Leaderboard() {
           </TableRow>
         </TableBody>
       </Table>
-
+      <p className="w-full text-center mt-24">areyoulockedin? received 69420 requests today.</p>
     </section>
   )
 }
