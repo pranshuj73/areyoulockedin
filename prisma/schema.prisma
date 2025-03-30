@@ -15,16 +15,17 @@ datasource db {
 }
 
 model User {
-  id         String      @id @default(uuid())
-  sessionKey String      @unique
+  id          String      @id @default(uuid())
+  clerkId     String      @unique
+  sessionKey  String      @unique
   timeEntries TimeEntry[]
 }
 
 model TimeEntry {
-  id        Int      @id @default(autoincrement())
-  sessionKey String
-  timeSpent Float
-  language  String
-  timestamp DateTime
-  user      User     @relation(fields: [sessionKey], references: [sessionKey])
+  id          Int       @id @default(autoincrement())
+  sessionKey  String
+  timeSpent   Float
+  language    String
+  timestamp   DateTime
+  user        User      @relation(fields: [sessionKey], references: [sessionKey])
 }
