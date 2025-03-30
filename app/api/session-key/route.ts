@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
-import { PrismaClient } from '@/prisma/generated/client';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
       const user = await prisma.user.upsert({
         where: { id: userId },
         update: { sessionKey },
-        create: { id: userId, sessionKey },
+        create: { id: userId, sessionKey, clerkId: uuidv4() },
       });
   
       return NextResponse.json({ sessionKey }, { status: 200 });
