@@ -1,11 +1,10 @@
 import {
   SignInButton,
-  SignUpButton,
   SignedIn,
   SignedOut,
-  UserButton,
 } from '@clerk/nextjs'
 import ThemeToggleButton from "./theme-toggle-btn";
+import NavUserButton from './nav-user-button';
 
 export default function Navbar() {
   return (
@@ -13,11 +12,10 @@ export default function Navbar() {
       <h1 className="text-lg font-semibold">areyoulockedin?</h1>
       <div className="flex items-center justify-center gap-4">
         <SignedOut>
-          <SignInButton />
-          <SignUpButton />
+          <SignInButton withSignUp />
         </SignedOut>
         <SignedIn>
-          <UserButton />
+          <NavUserButton />
         </SignedIn>
         <ThemeToggleButton />
       </div>
