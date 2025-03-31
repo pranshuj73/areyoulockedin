@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
     try {
-      const { userId } = await request.json();
+      const { userId, username, twitterId } = await request.json();
   
       if (!userId) {
         return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
@@ -14,10 +14,29 @@ export async function POST(request: NextRequest) {
   
       const sessionKey = uuidv4();
   
+      // Use type assertion to avoid type errors
+      const userData = {
+        sessionKey,
+      };
+      
+      if (username) {
+        (userData as any).username = username;
+      }
+      
+      if (twitterId) {
+        (userData as any).twitterId = twitterId;
+      }
+  
       const user = await prisma.user.upsert({
         where: { id: userId },
-        update: { sessionKey },
-        create: { id: userId, sessionKey, clerkId: uuidv4() },
+        update: userData,
+        create: { 
+          id: userId, 
+          sessionKey, 
+          clerkId: userId,
+          ...(username ? { username } : {}),
+          ...(twitterId ? { twitterId } : {})
+        },
       });
   
       return NextResponse.json({ sessionKey }, { status: 200 });
