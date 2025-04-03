@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import { getLanguage } from '@/lib/language';
+import { getLanguage } from '@/lib/extmap';
 
 const prisma = new PrismaClient();
 
