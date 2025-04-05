@@ -5,7 +5,7 @@ import { getLanguage } from '@/lib/extmap';
 const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
-  return null;
+  return NextResponse.json({ error: '<3' }, { status: 500 });
   try {
     const { sessionKey, timeSpent, fileExtension, timestamp } = await request.json();
 
