@@ -1,25 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import { PrismaClient } from '@prisma/client';
+import { currentUser } from '@clerk/nextjs/server';
 
 const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
   try {
     const { userId } = await request.json();
+    const user = await currentUser();
+    const clerkId = user?.id;
 
     if (!userId) {
       return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
     }
 
+    if (!clerkId) {
+      return NextResponse.json({ error: 'User not authenticated' }, { status: 401 });
+    }
+
     const sessionKey = uuidv4();
 
-    const user = await prisma.user.upsert({
+    const dbUser = await prisma.user.upsert({
       where: { id: userId },
       update: { sessionKey },
-      create: { id: userId, sessionKey, clerkId: uuidv4() },
+      create: { id: userId, sessionKey, clerkId },
     });
 
+    console.log('Session key created for clerk user:', clerkId, sessionKey);
+    
     return NextResponse.json({ sessionKey }, { status: 200 });
   } catch (error) {
     console.error('Error generating session key:', error);

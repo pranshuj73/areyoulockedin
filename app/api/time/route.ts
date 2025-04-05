@@ -1,18 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import { getLanguage } from '@/lib/extmap';
 
 const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
   try {
-    const { sessionKey, timeSpent, fileExtension, timestamp } = await request.json();
+    const { sessionKey, timeSpent, language, timestamp } = await request.json();
 
-    if (!sessionKey || !timeSpent || !fileExtension || !timestamp) {
+    if (!sessionKey || !timeSpent || !language || !timestamp) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
-
-    const language = getLanguage(fileExtension);
 
     const user = await prisma.user.findUnique({
       where: { sessionKey },
@@ -26,7 +23,7 @@ export async function POST(request: NextRequest) {
       data: {
         sessionKey,
         timeSpent: parseFloat(timeSpent),
-        language: language ? language : "text",
+        language: language || "text", // Use the sent language directly
         timestamp: new Date(timestamp),
       },
     });
