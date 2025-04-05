@@ -29,7 +29,7 @@ export default function LeaderboardRow({ position, username, time, languages }: 
         {position === 1 ? <TrophyIcon className="size-5 -ml-7" /> : position === 2 || position === 3 ? <MedalIcon className="size-5 -ml-7" /> : null}
         #{position}
       </TableCell>
-      <TableCell className={"font-semibold" + (position === 1 ? " text-base" : "")}>@{username}</TableCell>
+      <TableCell className={"font-semibold"}>@{username}</TableCell>
       <TableCell className="text-center">{time}m</TableCell>
       <LanguagePills languages={languages} />
     </TableRow>
