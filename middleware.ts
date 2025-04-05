@@ -45,8 +45,6 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
       console.log(`Rate limiting identifier found in header '${SESSION_KEY_HEADER}': ${identifier}`);
     } else {
       // Fall back to IP address if header is missing or empty
-      identifier = req.ip ?? '127.0.0.1'; // Use IP, fallback if unavailablej
-      console.log(`Rate limiting identifier using IP: ${identifier}`);
       const clientIp = getClientIp(req); // Use the expanded function
       if (clientIp) {
         identifier = clientIp;
