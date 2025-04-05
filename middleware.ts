@@ -17,7 +17,7 @@ try {
     // Limit: 2 requests from the same identifier (IP or sessionKey) within a 60-second window
     limiter: Ratelimit.slidingWindow(2, '60 s'),
     analytics: true, // Optional: Enable analytics tracking in Upstash
-    prefix: '@upstash/ratelimit_api_hdr', // Optional: Custom prefix for keys (updated slightly)
+    prefix: '@upstash/ratelimit', // Optional: Custom prefix for keys (updated slightly)
   });
   console.log("Upstash Ratelimit initialized successfully.");
 
