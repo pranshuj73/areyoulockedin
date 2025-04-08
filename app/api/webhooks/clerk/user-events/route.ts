@@ -1,25 +1,24 @@
 import { UserJSON, WebhookEvent } from '@clerk/nextjs/server'
-import { headers } from 'next/headers'
 import { Webhook } from 'svix'
 import { PrismaClient } from '@prisma/client';
+import { NextRequest, NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 const webhookSecret = process.env.CLERK_WEBHOOK_SECRET || ``
 
-async function validateRequest(request: Request) {
+async function validateRequest(request: NextRequest) {
   const payloadString = await request.text()
-  const headerPayload = headers()
 
   const svixHeaders = {
-    'svix-id': headerPayload.get('svix-id')!,
-    'svix-timestamp': headerPayload.get('svix-timestamp')!,
-    'svix-signature': headerPayload.get('svix-signature')!,
+    'svix-id': request.headers.get('svix-id')!,
+    'svix-timestamp': request.headers.get('svix-timestamp')!,
+    'svix-signature': request.headers.get('svix-signature')!,
   }
   const wh = new Webhook(webhookSecret)
   return wh.verify(payloadString, svixHeaders) as WebhookEvent
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const payload = await validateRequest(request)
     console.log(payload)
@@ -45,9 +44,9 @@ export async function POST(request: Request) {
       console.log("User created/udpated with id:", userObj.id, "& username:", userObj.username);
     }
 
-    return Response.json({ message: 'payload received successfully!' })
+    return NextResponse.json({ message: 'payload received successfully!' })
   } catch (e) {
     console.log("encountered err:", e)
-    return Response.error()
+    return NextResponse.error()
   }
 }
