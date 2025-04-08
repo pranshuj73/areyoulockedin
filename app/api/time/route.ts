@@ -21,9 +21,10 @@ export async function POST(request: NextRequest) {
 
     const timeEntry = await prisma.timeEntry.create({
       data: {
+        userId: user.id,
         sessionKey,
         timeSpent: parseFloat(timeSpent),
-        language: language || "text", // Use the sent language directly
+        language: language || "Missingno", // Use the sent language directly
         timestamp: new Date(timestamp),
       },
     });

@@ -21,13 +21,12 @@ export async function POST(request: NextRequest) {
 
     const sessionKey = uuidv4();
 
-    const dbUser = await prisma.user.upsert({
+    const dbUser = await prisma.user.update({
       where: { id: userId },
-      update: { sessionKey },
-      create: { id: userId, sessionKey, clerkId },
+      data: { sessionKey },
     });
 
-    console.log('Session key created for clerk user:', clerkId, sessionKey);
+    console.log('Session key created for clerk user:', dbUser.id, dbUser.username, dbUser.sessionKey);
     
     return NextResponse.json({ sessionKey }, { status: 200 });
   } catch (error) {

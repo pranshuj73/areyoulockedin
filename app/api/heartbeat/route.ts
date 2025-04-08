@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       data: {
         sessionKey,
         timeSpent: parseFloat(timeSpent),
-        language: language ?? "Text",
+        language: language ?? "Missingno",
         timestamp: new Date(timestamp),
       },
     });

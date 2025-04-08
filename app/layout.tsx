@@ -4,7 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/providers/theme-provider"
 import { ClerkProvider } from "@clerk/nextjs";
-import { AuthProvider } from "@/providers/auth-provider";
+// import { AuthProvider } from "@/providers/auth-provider";
 import Footer from "@/components/footer";
 
 const geistSans = Geist({
@@ -38,11 +38,11 @@ export default function RootLayout({
             defaultTheme="system"
             enableSystem
           >
-            <AuthProvider>
+            {/* <AuthProvider> */}
               <Navbar />
               {children}
               <Footer />
-            </AuthProvider>
+            {/* </AuthProvider> */}
           </ThemeProvider>
         </body>
       </html>
