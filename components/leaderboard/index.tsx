@@ -6,8 +6,10 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import LeaderboardRow from "./leaderboard-row"
+import EmptyLeaderBoard from "./empty-leaderboard"
+import { LeaderboardEntry } from "@/types/leaderboard"
 
-export default function Leaderboard() {
+export default function Leaderboard({ data }: { data: LeaderboardEntry[] }) {
   return (
     <section className="text-lg">
       <h1 className="font-semibold text-xl mb-4">Today's Leaderboard</h1>
@@ -20,40 +22,24 @@ export default function Leaderboard() {
             <TableHead className="text-right">Languages</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          <LeaderboardRow
-            username="voltycodes"
-            position={1}
-            time={120}
-            languages={["JavaScript", "TypeScript"]}
-          />
-          <LeaderboardRow
-            username="satyansh"
-            position={2}
-            time={120}
-            languages={["JavaScript", "TypeScript", "Rust"]}
-          />
-          <LeaderboardRow
-            username="ranoutofusernames"
-            position={3}
-            time={120}
-            languages={["JavaScript", "TypeScript"]}
-          />
-          <LeaderboardRow
-            username="ranoutofusernames"
-            position={4}
-            time={120}
-            languages={["JavaScript", "TypeScript"]}
-          />
-          <LeaderboardRow
-            username="ranoutofusernames"
-            position={5}
-            time={120}
-            languages={["JavaScript", "TypeScript"]}
-          />
-        </TableBody>
+
+        {data.length !== 0 && (
+          <TableBody>
+            {data.map((entry, index) => (
+              <LeaderboardRow
+                key={entry.userId}
+                username={entry.username}
+                position={index + 1}
+                time={entry.totalTimeSpent}
+                languages={entry.languages}
+              />
+            ))}
+          </TableBody>
+        )}
+
       </Table>
-      <p className="text-sm w-full text-center mt-24">areyoulockedin? received 69420 requests today.</p>
+      {data.length === 0 && <EmptyLeaderBoard />}
+      {/* <p className="text-sm w-full text-center mt-24">areyoulockedin? received 69420 requests today.</p> */}
     </section>
   )
 }
