@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       const username = data.username
       const profilePictureUrl = data.image_url
 
-      if (!userId && !username) {
+      if (!userId || !username) {
         console.log('User ID or username is missing. Received Payload:', payload);
         return NextResponse.error()
       }
