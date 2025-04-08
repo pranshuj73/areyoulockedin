@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
 
       if (!userId && !username) {
         console.log('User ID or username is missing. Received Payload:', payload);
-        return Response.error()
+        return NextResponse.error()
       }
 
       // now handle user creation

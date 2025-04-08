@@ -9,20 +9,19 @@ datasource db {
 
 model User {
   // Use Clerk's user ID as the primary key for our User table
-  id                String      @id // No default, value comes from Clerk
-  username          String?     // Store username from Clerk
-  profilePictureUrl String?     // Store profile picture URL from Clerk
-  sessionKey String      @unique @default(uuid()) // The currently active session key for this user
-  timeEntries       TimeEntry[] // Relation to time entries
+  id                String      @id                      // No default, value comes from Clerk
+  username          String      @unique                  // Store username from Clerk
+  profilePictureUrl String?                              // Store profile picture URL from Clerk
+  sessionKey        String      @unique @default(uuid()) // The currently active session key for this user
+  timeEntries       TimeEntry[]                          // Relation to time entries
+  createdAt         DateTime    @default(now())          // When the user was created
 
-  // No need for a separate clerkId field anymore
   @@index([sessionKey]) // Index for faster lookups during time entry insertion
 }
 
 model TimeEntry {
   id          Int      @id @default(autoincrement())
-  // This now refers to User.id, which is the Clerk User ID
-  userId      String
+  userId      String   // the user id (clerk id)
   sessionKey  String   // The specific session key used when this entry was created
   timeSpent   Float    // Time spent in this entry
   language    String   // Language used
