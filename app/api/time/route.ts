@@ -19,11 +19,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid session key' }, { status: 401 });
     }
 
+    const roundedTimeSpent = Math.ceil(parseFloat(timeSpent) * 100) / 100;
+
     const timeEntry = await prisma.timeEntry.create({
       data: {
         userId: user.id,
         sessionKey,
-        timeSpent: parseFloat(timeSpent),
+        timeSpent: roundedTimeSpent,
         language: language || "Missingno", // Use the sent language directly
         timestamp: new Date(timestamp),
       },
