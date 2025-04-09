@@ -29,6 +29,7 @@ export default function Leaderboard({ data }: { data: LeaderboardEntry[] }) {
               <LeaderboardRow
                 key={entry.userId}
                 username={entry.username}
+                pfp={entry.profilePictureUrl}
                 position={index + 1}
                 time={entry.totalTimeSpent}
                 languages={entry.languages}
