@@ -44,7 +44,7 @@ export default function LeaderboardRow({ position, username, time, languages, pf
       <TableCell className={"font-semibold"}>
         <User username={username} pfp={pfp} />
       </TableCell>
-      <TableCell className="text-center">{time}m</TableCell>
+      <TableCell className="text-center">{Math.ceil(time)}m</TableCell>
       <LanguagePills languages={languages} />
     </TableRow>
   )
