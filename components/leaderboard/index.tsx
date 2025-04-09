@@ -12,7 +12,6 @@ import { LeaderboardEntry } from "@/types/leaderboard"
 export default function Leaderboard({ data }: { data: LeaderboardEntry[] }) {
   return (
     <section className="text-lg">
-      <h1 className="font-semibold text-xl mb-4">Today's Leaderboard</h1>
       <Table>
         <TableHeader>
           <TableRow>

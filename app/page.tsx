@@ -47,7 +47,7 @@ export default async function Home() {
 
   return (
     <main className="mt-18 p-8 min-h-dvh">
-      <h1 className="text-2xl font-bold mb-6">Leaderboard</h1>
+      <h1 className="text-2xl font-bold mb-6">Today's Leaderboard</h1>
       <Leaderboard data={leaderboardData} />
     </main>
   );
