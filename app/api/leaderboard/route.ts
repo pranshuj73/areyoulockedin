@@ -5,7 +5,15 @@ const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
   try {
-    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const now = new Date();
+    const twentyFourHoursAgo = new Date(Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+      now.getUTCHours(),
+      now.getUTCMinutes(),
+      now.getUTCSeconds()
+    ) - 24 * 60 * 60 * 1000);
 
     // 1. Aggregate time spent, grouping by userId (which is the Clerk ID)
     const aggregatedData = await prisma.timeEntry.groupBy({
@@ -85,6 +93,6 @@ export async function GET(request: NextRequest) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return NextResponse.json({ error: 'Failed to fetch leaderboard data', details: errorMessage }, { status: 500 });
   } finally {
-     // await prisma.$disconnect(); // Optional
+    // await prisma.$disconnect(); // Optional
   }
 }
