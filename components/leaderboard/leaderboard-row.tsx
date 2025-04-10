@@ -5,6 +5,8 @@ import {
 import { MedalIcon, TrophyIcon } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link"
+import { getDecorations } from "@/lib/decorations"
+import { FileType } from "@/types/lang"
 
 interface LeaderboardRowProps {
   position: number
@@ -15,17 +17,21 @@ interface LeaderboardRowProps {
 }
 
 const LanguagePills = ({ languages }: { languages: string[] }) => (
-  <TableCell className="text-right">{
-    languages.map((language, index) => (
-      <span key={index} className="inline-block bg-gray-200 rounded-full px-2 py-1 text-xs font-medium text-gray-700 mr-2">
-        {language}
-      </span>
-    ))
+  <TableCell className="text-right flex items-center justify-end">{
+    languages.map((language, index) => {
+      const decorations = getDecorations(language as FileType)
+      return (
+        <span key={index} className="flex items-center justify-center gap-2 bg-gray-200 rounded-full px-2 py-1 text-xs font-medium text-gray-700 mr-2">
+          {decorations && decorations.image && <img src={decorations.image} alt={language} className="size-4" />}
+          {language}
+        </span>
+      )
+    })
   }
   </TableCell>
 )
 
-const User = ({username, pfp}: {username: string, pfp?: string}) => (
+const User = ({ username, pfp }: { username: string, pfp?: string }) => (
   <Link className="flex items-center gap-2 hover:bg-foreground/10 w-min pl-1 pr-3 py-1 -my-1 rounded-full transition-all duration-300 ease-out" href={`https://x.com/${username}`} target="_blank">
     <Avatar>
       <AvatarImage src={pfp} />
