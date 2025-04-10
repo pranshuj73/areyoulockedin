@@ -7,12 +7,14 @@ const prisma = new PrismaClient();
 export async function POST(request: NextRequest) {
   try {
     const { sessionKey, timeSpent, extension, timestamp } = await request.json();
+    console.log(`received ${timeSpent}m for ext:${extension} by key:${sessionKey} at ${timestamp}`);
 
     if (!sessionKey || !timeSpent || !extension || !timestamp) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     const language = getLanguage(extension);
+    console.log(`received ${timeSpent}m for ext:${extension} lang:${language} by key:${sessionKey} at ${timestamp}`);
 
     if (!language) {
       return NextResponse.json({ error: 'Unsupported file extension' }, { status: 400 });
