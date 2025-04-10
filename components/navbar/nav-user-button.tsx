@@ -11,10 +11,18 @@ const SessionKeyIcon = () => (
 )
 
 async function fetchSessionKey(): Promise<string | null> {
+  const now = Date.now();
+  const twentyFourHoursAgo = new Date(now - 24 * 60 * 60 * 1000);
+
   const localSessionKey = localStorage.getItem('sessionKey');
-  if (localSessionKey) {
-    console.log(`Using session key from local storage.`);
-    return localSessionKey;
+  const sessionKeyLastUpdatedValue = localStorage.getItem('sessionKeyLastUpdated');
+
+  if (localSessionKey && sessionKeyLastUpdatedValue) {
+    const sessionKeyLastUpdated = new Date(sessionKeyLastUpdatedValue);
+    if (sessionKeyLastUpdated < twentyFourHoursAgo) {
+      console.log(`Using session key from local storage.`);
+      return localSessionKey;
+    }
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -46,6 +54,7 @@ async function fetchSessionKey(): Promise<string | null> {
 
     console.log(`Successfully fetched session key.`);
     localStorage.setItem('sessionKey', result.sessionKey); // Store in local storage
+    localStorage.setItem('sessionKeyLastUpdated', new Date().toISOString()); // Store the last updated time
     return result.sessionKey;
 
   } catch (error) {
