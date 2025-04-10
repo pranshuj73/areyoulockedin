@@ -1,4 +1,4 @@
-import type { FileType } from "@/lib/extmap/lang";
+import type { FileType } from "@/types/lang";
 
 export const fileExtensionMap: Record<string, FileType> = {
   // Programming Languages - Sorted roughly alphabetically by language name for grouping

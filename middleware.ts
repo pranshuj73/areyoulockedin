@@ -14,8 +14,8 @@ try {
 
   ratelimit = new Ratelimit({
     redis: redis,
-    // Limit: 2 requests from the same identifier (IP or sessionKey) within a 60-second window
-    limiter: Ratelimit.slidingWindow(2, '60 s'),
+    // Limit: 4 requests from the same identifier (IP or sessionKey) within a 60-second window
+    limiter: Ratelimit.slidingWindow(4, '60 s'),
     analytics: true, // Optional: Enable analytics tracking in Upstash
     prefix: '@upstash/ratelimit', // Optional: Custom prefix for keys (updated slightly)
   });
