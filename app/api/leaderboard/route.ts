@@ -5,19 +5,12 @@ const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
   try {
-    const now = new Date();
-    const twentyFourHoursAgo = new Date(Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate(),
-      now.getUTCHours(),
-      now.getUTCMinutes(),
-      now.getUTCSeconds()
-    ) - 24 * 60 * 60 * 1000);
+    const now = Date.now();
+    const twentyFourHoursAgo = new Date(now - 24 * 60 * 60 * 1000);
 
-    // 1. Aggregate time spent, grouping by userId (which is the Clerk ID)
+    // 1. Aggregate time spent and count, grouping by userId
     const aggregatedData = await prisma.timeEntry.groupBy({
-      by: ['userId'], // Group by the Clerk User ID stored in TimeEntry.userId
+      by: ['userId'],
       where: {
         timestamp: {
           gte: twentyFourHoursAgo,
@@ -26,56 +19,81 @@ export async function GET(request: NextRequest) {
       _sum: {
         timeSpent: true,
       },
+      _count: {
+        _all: true, // Count all entries per user (heartbeats)
+      },
       orderBy: {
         _sum: {
           timeSpent: 'desc',
         },
       },
-      take: 100 // Optional: Limit
+      take: 100, // Limit to top 100
     });
 
     if (aggregatedData.length === 0) {
-      return NextResponse.json({ data: [] }, { status: 200 });
+      const responseData = { data: [], totalHeartbeatsReceived: 0 };
+      // Optional: Update cache
+      // cache.data = responseData;
+      // cache.timestamp = now;
+      return NextResponse.json(responseData, { status: 200 });
     }
 
-    // 2. Get the User IDs (Clerk IDs) from the aggregation results
+    // Calculate total heartbeats from the first aggregation result
+    const totalHeartbeatsReceived = aggregatedData.reduce(
+        (sum, agg) => sum + agg._count._all, 0
+    );
+
+    // 2. Get the User IDs from the aggregation results
     const userIds = aggregatedData.map(item => item.userId);
 
-    // 3. Fetch user details using their Clerk IDs (which are the User.id now)
+    // 3. Fetch user details (username, profile picture) for these specific users
+    //    NO nested time entry selection here.
     const users = await prisma.user.findMany({
       where: {
-        id: { // Querying User table by its 'id' field (the Clerk ID)
+        id: {
           in: userIds,
         },
       },
       select: {
-        id: true, // Select the User ID (Clerk ID)
+        id: true,
         username: true,
         profilePictureUrl: true,
-        // Select related time entries to get distinct languages
-        timeEntries: {
-          where: {
-            timestamp: {
-              gte: twentyFourHoursAgo,
-            },
-          },
-          select: {
-            language: true,
-          },
-          distinct: ['language'],
-        },
       },
     });
 
-    // 4. Create a map for easy lookup by userId (Clerk ID)
+    // 4. Fetch distinct languages for these users within the time frame
+    const languageData = await prisma.timeEntry.groupBy({
+        by: ['userId', 'language'],
+        where: {
+            userId: {
+                in: userIds,
+            },
+            timestamp: {
+                gte: twentyFourHoursAgo,
+            },
+        },
+        // We only need the grouping, no aggregates needed here
+    });
+
+    // 5. Create maps for efficient lookup
     const userMap = new Map(users.map(user => [user.id, user]));
+    const languageMap = new Map<string, Set<string>>(); // Map<userId, Set<language>>
 
-    // 5. Combine aggregated data with user details
+    // Populate the language map
+    for (const entry of languageData) {
+        if (!languageMap.has(entry.userId)) {
+            languageMap.set(entry.userId, new Set());
+        }
+        languageMap.get(entry.userId)?.add(entry.language);
+    }
+
+
+    // 6. Combine aggregated data with user details and languages
     const leaderboard = aggregatedData.map(agg => {
-      const user = userMap.get(agg.userId); // Lookup using the Clerk ID
-      if (!user) return null;
+      const user = userMap.get(agg.userId);
+      if (!user) return null; // Should not happen if DB is consistent
 
-      const languages = user.timeEntries.map(entry => entry.language);
+      const languages = Array.from(languageMap.get(agg.userId) ?? new Set()); // Get languages from the map
 
       return {
         userId: user.id,
@@ -84,15 +102,17 @@ export async function GET(request: NextRequest) {
         totalTimeSpent: agg._sum.timeSpent ?? 0,
         languages: languages,
       };
-    }).filter(item => item !== null);
+    }).filter(item => item !== null); // Filter out any potential nulls
 
-    return NextResponse.json({ data: leaderboard }, { status: 200 });
+    const responseData = { data: leaderboard, totalHeartbeatsReceived };
+
+    return NextResponse.json(responseData, { status: 200 });
 
   } catch (error) {
     console.error('Error fetching leaderboard data:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return NextResponse.json({ error: 'Failed to fetch leaderboard data', details: errorMessage }, { status: 500 });
   } finally {
-    // await prisma.$disconnect(); // Optional
+    // await prisma.$disconnect(); // Generally not needed in serverless environments
   }
 }
