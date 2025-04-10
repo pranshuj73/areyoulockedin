@@ -14,7 +14,7 @@ async function getLeaderboardData(): Promise<ApiResponse> {
     console.log(`Fetching leaderboard data from: ${apiUrl}`);
     const res = await fetch(apiUrl, {
       next: {
-        revalidate: 600, // Revalidate cache every 600 seconds (10 minutes)
+        revalidate: 900, // Revalidate cache every 900 seconds (15 minutes)
         tags: ['leaderboard'],
       },
       headers: { 'Content-Type': 'application/json' },
