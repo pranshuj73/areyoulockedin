@@ -79,30 +79,36 @@ export function SessionKeyField({ className }: SessionKeyFieldProps) {
     setIsLoading(false);
   };
 
-  if (isLoading) {
-    return <Skeleton className="h-10 w-full mt-4" />
-  }
-
-  if (sessionKeyFetchErr) {
-    return <p className='text-red-600 mt-4'>Session key for your account could not be retrieved. Please drop an email at <a href="mailto:support@areyoulocked.in">support@areyoulocked.in</a></p>
-  }
-
-
   return (
     <div className={`flex flex-col gap-1.5 bg-transparent text-current ${className}`}>
       <label className="text-sm font-medium">Session Key</label>
-      <div className="flex w-full items-center gap-2">
-        <Input value={sessionKey ? sessionKey : "••••••••-••••-••••-••••-••••••••••••"} readOnly className="flex-1 !bg-transparent !text-current border-black/30" onClick={(e) => (e.target as HTMLInputElement).select()} />
-        <Button
-          variant="default"
-          size="icon"
-          onClick={sessionKey !== null ? copyToClipboard : getKey}
-          className="h-10 w-10 shrink-0 !bg-transparent !text-current border border-black/30"
-          aria-label="Copy to clipboard"
-        >
-          {(sessionKey !== null) ? ((copied) ? <CheckIcon className="h-4 w-4 text-green-500" /> : <CopyIcon className="h-4 w-4" />) : <EyeIcon className="h-4 w-4" />}
-        </Button>
-      </div>
+
+      {sessionKeyFetchErr ? (
+        <p className='text-red-600 mt-4'>Session key for your account could not be retrieved. Please drop an email at <a href="mailto:support@areyoulocked.in">support@areyoulocked.in</a></p>
+      ) : (
+        <div className="flex w-full items-center gap-2">
+          {isLoading ? (
+            <Skeleton className="h-10 w-full mt-4" />
+          ) : (
+            <Input
+              value={sessionKey ? sessionKey : "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"}
+              readOnly
+              type={sessionKey ? "text" : "password"}
+              className="flex-1 !bg-transparent !text-current border-black/30"
+              onClick={(e) => (e.target as HTMLInputElement).select()}
+            />
+          )}
+          <Button
+            variant="default"
+            size="icon"
+            onClick={sessionKey !== null ? copyToClipboard : getKey}
+            className="h-10 w-10 shrink-0 !bg-transparent !text-current border border-black/30"
+            aria-label="Copy to clipboard"
+          >
+            {(sessionKey !== null) ? ((copied) ? <CheckIcon className="h-4 w-4 text-green-500" /> : <CopyIcon className="h-4 w-4" />) : <EyeIcon className="h-4 w-4" />}
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
