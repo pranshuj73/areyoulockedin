@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import { getLanguage } from '@/lib/extmap';
+import { getLanguage } from '@/lib/language';
 
 const prisma = new PrismaClient();
 
@@ -14,10 +14,10 @@ export async function POST(request: NextRequest) {
     }
 
     const language = getLanguage(extension);
-    console.log(`received ${timeSpent}m for ext:${extension} lang:${language} by key:${sessionKey} at ${timestamp}`);
 
     if (!language) {
-      return NextResponse.json({ error: 'Unsupported file extension' }, { status: 400 });
+      console.log("Unsupported file extension [Language could not be inferred]:", extension)
+      return NextResponse.json({ error: `Unsupported file extension [Language could not be inferred]: ${extension}` }, { status: 400 });
     }
 
     const user = await prisma.user.findUnique({
@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
+      console.log("Invalid session key", sessionKey)
       return NextResponse.json({ error: 'Invalid session key' }, { status: 401 });
     }
 

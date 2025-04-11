@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
         username: user.username,
         profilePictureUrl: user.profilePictureUrl ?? null,
         totalTimeSpent: agg._sum.timeSpent ?? 0,
-        languages: languages,
+        languages: languages.slice(0, 7),
       };
     }).filter(item => item !== null); // Filter out any potential nulls
 
