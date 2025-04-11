@@ -20,9 +20,11 @@ async function fetchSessionKey(): Promise<string | null> {
   try {
     const res = await fetch(apiUrl, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
+      next: {
+        revalidate: 900, // Revalidate cache every 900 seconds (15 minutes)
+        tags: ['session-key'],
       },
+      headers: { 'Content-Type': 'application/json' },
     });
 
     if (!res.ok) {
@@ -88,7 +90,7 @@ export function SessionKeyField({ className }: SessionKeyFieldProps) {
       ) : (
         <div className="flex w-full items-center gap-2">
           {isLoading ? (
-            <Skeleton className="h-10 w-full" />
+            <Skeleton className="opacity-25 h-10 w-full" />
           ) : (
             <Input
               value={sessionKey ? sessionKey : "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"}
