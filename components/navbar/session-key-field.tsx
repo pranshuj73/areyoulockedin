@@ -54,7 +54,7 @@ export function SessionKeyField({ className }: SessionKeyFieldProps) {
   const [sessionKey, setSessionKey] = useState<string | null>(null)
   const [sessionKeyFetchErr, setSessionKeyFetchErr] = useState<boolean>(false)
   const [copied, setCopied] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const copyToClipboard = async () => {
     try {
