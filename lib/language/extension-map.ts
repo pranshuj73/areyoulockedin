@@ -107,4 +107,5 @@ export const fileExtensionMap: Record<string, FileType> = {
   "makefile": "Makefile",
   "graphql": "GraphQL",  // GraphQL Schema Definition Language or queries
   "gql": "GraphQL",
+  "nix": "Nix",
 };

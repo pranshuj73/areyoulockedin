@@ -58,7 +58,8 @@ type OtherFormat =
   | "Dockerfile"
   | "Makefile"
   | "Log"
-  | "GraphQL";   // GraphQL Schema/Query files
+  | "GraphQL"   // GraphQL Schema/Query files
+  | "Nix";   // GraphQL Schema/Query files
 
 // Combine the types for the map value
 export type FileType = Language | OtherFormat;
