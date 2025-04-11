@@ -88,7 +88,7 @@ export function SessionKeyField({ className }: SessionKeyFieldProps) {
       ) : (
         <div className="flex w-full items-center gap-2">
           {isLoading ? (
-            <Skeleton className="h-10 w-full mt-4" />
+            <Skeleton className="h-10 w-full" />
           ) : (
             <Input
               value={sessionKey ? sessionKey : "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"}
