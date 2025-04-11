@@ -8,13 +8,13 @@ export const fileExtensionMap: Record<string, FileType> = {
   "cmd": "Batch",      // Windows Batch (newer)
   "c": "C",
   "h": "C",            // C Header (often used with C/C++ too, but primary C)
-  "cpp": "CPlusPlus",  // C++
-  "cxx": "CPlusPlus",  // C++
-  "cc": "CPlusPlus",   // C++
-  "hpp": "CPlusPlus",  // C++ Header
-  "hxx": "CPlusPlus",  // C++ Header
-  "hh": "CPlusPlus",   // C++ Header (less common)
-  "cs": "CSharp",      // C#
+  "cpp": "C++",  // C++
+  "cxx": "C++",  // C++
+  "cc": "C++",   // C++
+  "hpp": "C++",  // C++ Header
+  "hxx": "C++",  // C++ Header
+  "hh": "C++",   // C++ Header (less common)
+  "cs": "C#",      // C#
   "clj": "Clojure",
   "cljs": "Clojure",   // ClojureScript
   "cljc": "Clojure",   // Clojure/ClojureScript portable
@@ -27,8 +27,8 @@ export const fileExtensionMap: Record<string, FileType> = {
   "elm": "Elm",
   "erl": "Erlang",
   "hrl": "Erlang",     // Erlang Header
-  "fs": "FSharp",      // F#
-  "fsx": "FSharp",     // F# Script
+  "fs": "F#",      // F#
+  "fsx": "F#",     // F# Script
   "gleam": "Gleam",
   "go": "Go",
   "groovy": "Groovy",
@@ -101,12 +101,10 @@ export const fileExtensionMap: Record<string, FileType> = {
   "ini": "INI",
   "cfg": "INI",        // Common alternative for INI/Config
   "conf": "INI",       // Common alternative for INI/Config
-  "svg": "SVG",
+  "svg": "XML",
   "dockerfile": "Dockerfile", // Often has no extension but this pattern is common
   "Makefile": "Makefile",     // Often has no extension but this pattern is common
   "makefile": "Makefile",
-  "gitignore": "Ignore", // Specific name, often no extension
-  "dockerignore": "Ignore", // Specific name, often no extension
   "graphql": "GraphQL",  // GraphQL Schema Definition Language or queries
   "gql": "GraphQL",
 };

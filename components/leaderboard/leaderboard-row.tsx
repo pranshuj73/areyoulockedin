@@ -5,7 +5,7 @@ import {
 import { MedalIcon, TrophyIcon } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link"
-import { getDecorations } from "@/lib/decorations"
+import { getDecorations } from "@/lib/language"
 import { FileType } from "@/types/lang"
 
 interface LeaderboardRowProps {

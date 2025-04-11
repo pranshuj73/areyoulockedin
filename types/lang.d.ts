@@ -18,10 +18,10 @@ type Language =
   | "Kotlin"
   | "Swift"
   | "ObjectiveC" // Objective-C / Objective-C++
-  | "CSharp"     // C#
-  | "FSharp"     // F#
+  | "C#"     // C#
+  | "F#"     // F#
   | "C"
-  | "CPlusPlus"  // C++
+  | "C++"
   | "PHP"
   | "Ruby"
   | "Perl"
@@ -55,10 +55,8 @@ type OtherFormat =
   | "Properties" // Java .properties files
   | "TOML"
   | "INI"        // Config INI files
-  | "SVG"        // Scalable Vector Graphics (XML-based)
   | "Dockerfile"
   | "Makefile"
-  | "Ignore"     // .gitignore, .dockerignore etc.
   | "Log"
   | "GraphQL";   // GraphQL Schema/Query files
 
