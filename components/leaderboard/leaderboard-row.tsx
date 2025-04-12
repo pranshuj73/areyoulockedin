@@ -17,18 +17,19 @@ interface LeaderboardRowProps {
 }
 
 const LanguagePills = ({ languages }: { languages: string[] }) => (
-  <TableCell className="text-right w-full max-w-[60%]">{
-    languages.map((language, index) => {
-      const decorations = getDecorations(language as FileType)
-      return (
-        <span key={index} className="inline-flex items-center justify-center gap-2 bg-gray-200 rounded-full px-2 py-1 text-xs font-medium text-gray-700 mr-2">
-          {decorations && decorations.image && <img src={decorations.image} alt={language} className="size-4" />}
-          {language}
-        </span>
-      )
-    })
-  }
-  </TableCell>
+  <div className="text-right h-full w-full flex items-center justify-end">
+    {
+      languages.map((language, index) => {
+        const decorations = getDecorations(language as FileType)
+        return (
+          <span key={index} className="flex items-center justify-center gap-2 bg-gray-200 rounded-full px-2 py-1 text-xs font-medium text-gray-700 mr-2">
+            {decorations && decorations.image && <img src={decorations.image} alt={language} className="size-4" />}
+            {language}
+          </span>
+        )
+      })
+    }
+  </div>
 )
 
 const User = ({ username, pfp }: { username: string, pfp?: string }) => (
@@ -52,7 +53,9 @@ export default function LeaderboardRow({ position, username, time, languages, pf
         <User username={username} pfp={pfp} />
       </TableCell>
       <TableCell className="text-center">{Math.ceil(time)}m</TableCell>
-      <LanguagePills languages={languages} />
+      <TableCell className="text-right h-full w-full items-center justify-end">
+        <LanguagePills languages={languages} />
+      </TableCell>
     </TableRow>
   )
 }
