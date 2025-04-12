@@ -18,8 +18,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Are You Locked In?",
-  description: "coding time tracker for developers",
+  metadataBase: new URL('https://areyoulokced.in'),
+  title: "areyoulocked.in",
+  description: "coding activity tracker with a public leaderboard, for developers, by developers",
+  openGraph: {
+    type: "website",
+    url: "https://areyoulocked.in",
+    title: "areyoulocked.in",
+    description: "coding activity tracker with a public leaderboard, for developers, by developers",
+    images: "/og-image.jpg",
+  },
+  twitter: {
+    card: "summary_large_image",
+    // site: "@heymatty",
+    creator: "@voltycodes",
+    title: "areyoulocked.in",
+    description: "coding activity tracker with a public leaderboard, for developers, by developers",
+    images: "/og-image.jpg",
+  }
 };
 
 export default function RootLayout({
@@ -39,9 +55,9 @@ export default function RootLayout({
             enableSystem
           >
             {/* <AuthProvider> */}
-              <Navbar />
-              {children}
-              <Footer />
+            <Navbar />
+            {children}
+            <Footer />
             {/* </AuthProvider> */}
           </ThemeProvider>
         </body>
