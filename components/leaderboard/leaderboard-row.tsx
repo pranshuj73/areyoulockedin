@@ -13,17 +13,17 @@ interface LeaderboardRowProps {
   position: number
   username: string
   time: number
-  languages: string[]
+  languages: FileType[]
   pfp?: string
 }
 
-const LanguagePills = ({ languages }: { languages: string[] }) => (
+const LanguagePills = ({ languages }: { languages: FileType[] }) => (
   <div className="text-right h-full w-full flex items-center justify-end gap-2">
     {
       languages.map((language, index) => {
-        const decorations = getDecorations(language as FileType)
+        const decorations = getDecorations(language)
         return (
-          <Badge key={index} className="flex items-center justify-center gap-2">
+          <Badge variant={"secondary"} key={index} className="cursor-default flex items-center justify-center gap-2 dark:bg-primary dark:text-primary-foreground">
             {decorations && decorations.image && <img src={decorations.image} alt={language} className="size-4" />}
             {language}
           </Badge>
@@ -47,7 +47,7 @@ export default function LeaderboardRow({ position, username, time, languages, pf
   return (
     <TableRow>
       <TableCell className="font-medium text-center flex items-center justify-center py-6">
-        {position === 1 ? <TrophyIcon className="size-5 mr-2 -ml-2" /> : position === 2 || position === 3 ? <MedalIcon className="size-5 mr-2 -ml-2" /> : null}
+        {position === 1 ? <TrophyIcon className="size-5 mr-2 -ml-7" /> : position === 2 || position === 3 ? <MedalIcon className="size-5 mr-2 -ml-7" /> : null}
         #{position}
       </TableCell>
       <TableCell className={"font-semibold"}>
