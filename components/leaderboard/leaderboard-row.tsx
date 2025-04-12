@@ -53,7 +53,7 @@ export default function LeaderboardRow({ position, username, time, languages, pf
         <User username={username} pfp={pfp} />
       </TableCell>
       <TableCell className="text-center">{Math.ceil(time)}m</TableCell>
-      <TableCell className="text-right h-full w-full items-center justify-end">
+      <TableCell className="text-right w-full max-w-[60%]">
         <LanguagePills languages={languages} />
       </TableCell>
     </TableRow>
