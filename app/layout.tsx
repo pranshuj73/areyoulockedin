@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://areyoulokced.in'),
+  metadataBase: new URL('https://areyoulocked.in'),
   title: "areyoulocked.in",
   description: "coding activity tracker with a public leaderboard, for developers, by developers",
   openGraph: {
@@ -26,15 +26,15 @@ export const metadata: Metadata = {
     url: "https://areyoulocked.in",
     title: "areyoulocked.in",
     description: "coding activity tracker with a public leaderboard, for developers, by developers",
-    images: "/og-image.jpg",
+    images: "/og-image.png",
   },
   twitter: {
     card: "summary_large_image",
-    // site: "@heymatty",
+    // site: "@areyoulockedin",
     creator: "@voltycodes",
     title: "areyoulocked.in",
     description: "coding activity tracker with a public leaderboard, for developers, by developers",
-    images: "/og-image.jpg",
+    images: "/og-image.png",
   }
 };
 
