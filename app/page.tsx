@@ -57,14 +57,14 @@ export default async function Home() {
       </div>
       
       <div className="w-full max-w-7xl mx-auto relative z-10">
-        <div className="mb-12 text-center">
+        {/* <div className="mb-12 text-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-chart-1/80 to-primary/60 bg-clip-text text-transparent">
             Developer Spotlight
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
             Showcasing today's most locked-in developers. See who's coding the most and what languages they're using.
           </p>
-        </div>
+        </div> */}
         
         <Leaderboard data={data} totalHeartbeatsReceived={totalHeartbeatsReceived} />
       </div>

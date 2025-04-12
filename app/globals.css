@@ -186,3 +186,90 @@
 .animate-pulse-slow {
   animation: pulse-slow 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+@keyframes border-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-border-flow {
+  animation: border-flow 3s ease infinite;
+  background-size: 200% 200%;
+}
+
+/* Gradient borders for leaderboard cards */
+.border-gradient-gold {
+  background: transparent;
+  position: relative;
+  z-index: 0;
+}
+
+.border-gradient-gold::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  padding: 2px;
+  border-radius: 0.5rem;
+  background: linear-gradient(90deg, #ffd700, #ffb700, #fef9c3, #ffd700);
+  background-size: 300% 100%;
+  animation: border-flow 3s ease infinite;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.border-gradient-silver {
+  background: transparent;
+  position: relative;
+  z-index: 0;
+}
+
+.border-gradient-silver::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  padding: 2px;
+  border-radius: 0.5rem;
+  background: linear-gradient(90deg, #c0c0c0, #e5e5e5, #a3a3a3, #c0c0c0);
+  background-size: 300% 100%;
+  animation: border-flow 4s ease infinite;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.border-gradient-bronze {
+  background: transparent;
+  position: relative;
+  z-index: 0;
+}
+
+.border-gradient-bronze::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  padding: 2px;
+  border-radius: 0.5rem;
+  background: linear-gradient(90deg, #cd7f32, #a05a2c, #e3a878, #cd7f32);
+  background-size: 300% 100%;
+  animation: border-flow 5s ease infinite;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}

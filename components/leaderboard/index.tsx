@@ -1,5 +1,5 @@
 import { LeaderboardEntry } from "@/types/leaderboard"
-import { TrophyIcon, MedalIcon } from "lucide-react"
+import { TrophyIcon, MedalIcon, Clock } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link"
 import { getDecorations } from "@/lib/language"
@@ -9,31 +9,31 @@ import EmptyLeaderBoard from "./empty-leaderboard"
 const PositionBadge = ({ position }: { position: number }) => {
   if (position === 1) {
     return (
-      <div className="absolute -top-3 -right-3 size-14 bg-yellow-500/10 rounded-full flex items-center justify-center">
+      <div className="absolute -top-2 -right-2 size-10 bg-yellow-500/10 rounded-full flex items-center justify-center">
         <div className="relative">
-          <TrophyIcon className="size-7 text-yellow-500" strokeWidth={1.5} />
+          <TrophyIcon className="size-5 text-yellow-500" strokeWidth={1.5} />
           <span className="absolute inset-0 text-yellow-500 animate-ping opacity-30">
-            <TrophyIcon className="size-7" strokeWidth={1.5} />
+            <TrophyIcon className="size-5" strokeWidth={1.5} />
           </span>
         </div>
       </div>
     )
   } else if (position === 2) {
     return (
-      <div className="absolute -top-3 -right-3 size-14 bg-gray-300/10 rounded-full flex items-center justify-center">
-        <MedalIcon className="size-7 text-gray-400" strokeWidth={1.5} />
+      <div className="absolute -top-2 -right-2 size-10 bg-gray-300/10 rounded-full flex items-center justify-center">
+        <MedalIcon className="size-5 text-gray-400" strokeWidth={1.5} />
       </div>
     )
   } else if (position === 3) {
     return (
-      <div className="absolute -top-3 -right-3 size-14 bg-amber-700/10 rounded-full flex items-center justify-center">
-        <MedalIcon className="size-7 text-amber-700" strokeWidth={1.5} />
+      <div className="absolute -top-2 -right-2 size-10 bg-amber-700/10 rounded-full flex items-center justify-center">
+        <MedalIcon className="size-5 text-amber-700" strokeWidth={1.5} />
       </div>
     )
   }
   
   return (
-    <div className="absolute -top-2 -right-2 size-9 bg-accent/10 rounded-full flex items-center justify-center">
+    <div className="absolute -top-2 -right-2 size-8 bg-accent/10 rounded-full flex items-center justify-center">
       <span className="text-accent-foreground font-semibold text-sm">#{position}</span>
     </div>
   )
@@ -47,76 +47,89 @@ const UserCard = ({ entry, position }: { entry: LeaderboardEntry, position: numb
   const timePercentage = Math.min(100, (totalTimeSpent / MAX_TIME) * 100)
   const circumference = 2 * Math.PI * 40 // 40 is the radius of the circle
   const strokeDashoffset = circumference - (timePercentage / 100) * circumference
+
+  // Determine border styles based on position
+  let borderColor = "";
+  if (position === 1) {
+    borderColor = "border-gradient-gold"
+  } else if (position === 2) {
+    borderColor = "border-gradient-silver"
+  } else if (position === 3) {
+    borderColor = "border-gradient-bronze"
+  }
   
   return (
     <div className="relative group">
-      <div className="absolute inset-0 bg-accent/5 blur-md opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-      
-      <div className="relative z-10 p-6 rounded-md border border-border/30 bg-background/30 backdrop-blur-sm hover:border-border/50 transition-all duration-300 h-full flex flex-col">
-        <PositionBadge position={position} />
-        
-        <div className="flex flex-col items-center mb-4">
-          <Avatar className="size-20 border border-border/30 mb-3 shadow-sm">
-            <AvatarImage src={pfp} />
-            <AvatarFallback className="bg-primary/10 text-primary text-xl font-semibold">{username.at(0)?.toUpperCase()}</AvatarFallback>
-          </Avatar>
+      <div className={`rounded-md ${borderColor}`}>
+        <div className="relative  z-10 p-4 rounded-md bg-background/50 backdrop-blur-sm hover:bg-background/70 transition-all duration-300 h-full flex flex-col">
+          <PositionBadge position={position} />
+
+          <div className= "flex w-full justify-evenly mb-5">
           
-          <Link 
-            href={`https://x.com/${username}`}
-            target="_blank"
-            className="text-foreground font-medium hover:text-primary transition-colors duration-200"
-          >
-            @{username}
-          </Link>
-        </div>
-        
-        <div className="relative flex justify-center items-center mb-5">
-          <svg className="transform -rotate-90 size-24" viewBox="0 0 100 100">
-            <circle
-              cx="50"
-              cy="50"
-              r="40"
-              fill="none"
-              stroke="currentColor"
-              className="text-accent/10"
-              strokeWidth="8"
-            />
-            <circle
-              cx="50"
-              cy="50"
-              r="40"
-              fill="none"
-              stroke="currentColor"
-              className="text-primary"
-              strokeWidth="8"
-              strokeDasharray={circumference}
-              strokeDashoffset={strokeDashoffset}
-              strokeLinecap="round"
-            />
-          </svg>
-          <div className="absolute inset-0 flex items-center justify-center flex-col">
-            <span className="text-xl font-bold">{Math.ceil(totalTimeSpent)}</span>
-            <span className="text-xs text-muted-foreground">minutes</span>
+          <div className="flex flex-col mr-auto   items-center mb-3">
+            <Avatar className="size-20 border border-border/30 mb-2 shadow-sm">
+              <AvatarImage src={pfp} />
+              <AvatarFallback className="bg-primary/10 text-primary text-lg font-semibold">{username.at(0)?.toUpperCase()}</AvatarFallback>
+            </Avatar>
+            
+            <Link 
+              href={`https://x.com/${username}`}
+              target="_blank"
+              className="text-foreground font-medium hover:text-primary transition-colors duration-200"
+            >
+              @{username}
+            </Link>
           </div>
-        </div>
-        
-        <div className="mt-auto">
-          <p className="text-xs text-muted-foreground mb-2 font-medium">Languages:</p>
-          <div className="flex flex-wrap gap-1.5">
-            {languages.map((language, index) => {
-              const decorations = getDecorations(language as FileType)
-              return (
-                <span 
-                  key={index} 
-                  className="inline-flex items-center gap-1 bg-accent/20 hover:bg-accent/40 rounded-sm px-1.5 py-0.5 text-xs font-medium text-accent-foreground transition-all duration-200"
-                >
-                  {decorations && decorations.image && (
-                    <img src={decorations.image} alt={language} className="size-3" />
-                  )}
-                  {language}
-                </span>
-              )
-            })}
+          
+          <div className="relative flex  mr-auto justify-center items-center mb-3">
+            <svg className="transform -rotate-90 size-32" viewBox="0 0 100 100">
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                fill="none"
+                stroke="currentColor"
+                className="text-accent/10"
+                strokeWidth="8"
+              />
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                fill="none"
+                stroke="currentColor"
+                className={position === 1 ? "text-yellow-500" : position === 2 ? "text-gray-400" : position === 3 ? "text-amber-700" : "text-primary"}
+                strokeWidth="8"
+                strokeDasharray={circumference}
+                strokeDashoffset={strokeDashoffset}
+                strokeLinecap="round"
+              />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center gap-1">
+              <span className="text-lg font-bold">{Math.ceil(totalTimeSpent)}</span>
+              <span className="text-[10px] text-muted-foreground">min</span>
+            </div>
+          </div>
+          </div>
+          
+          <div className="mt-auto">
+            <p className="text-xs text-muted-foreground mb-1 font-medium">Languages:</p>
+            <div className="flex flex-wrap gap-1">
+              {languages.map((language, index) => {
+                const decorations = getDecorations(language as FileType)
+                return (
+                  <span 
+                    key={index} 
+                    className="inline-flex items-center gap-1 bg-accent/20 hover:bg-accent/40 rounded-sm px-1 py-0.5 text-[10px] font-medium text-accent-foreground transition-all duration-200"
+                  >
+                    {decorations && decorations.image && (
+                      <img src={decorations.image} alt={language} className="size-2.5" />
+                    )}
+                    {language}
+                  </span>
+                )
+              })}
+            </div>
           </div>
         </div>
       </div>
@@ -124,18 +137,101 @@ const UserCard = ({ entry, position }: { entry: LeaderboardEntry, position: numb
   )
 }
 
+const UserRow = ({ entry, position }: { entry: LeaderboardEntry, position: number }) => {
+  const { username, profilePictureUrl: pfp, totalTimeSpent, languages } = entry
+  
+  return (
+    <div className="flex items-center border-b border-border/20 last:border-0 py-4 group hover:bg-accent/5 transition-all duration-200">
+      <div className="flex items-center gap-3 w-[50px] justify-center">
+        <div className="font-semibold text-muted-foreground">#{position}</div>
+      </div>
+      
+      <div className="flex-1 flex items-center">
+        <Link 
+          href={`https://x.com/${username}`}
+          target="_blank"
+          className="flex items-center gap-2.5 hover:bg-accent/10 pl-1.5 pr-4 py-1.5 rounded-md transition-all duration-200"
+        >
+          <Avatar className="size-10 border border-border/30 shadow-sm">
+            <AvatarImage src={pfp} />
+            <AvatarFallback className="bg-primary/10 text-primary font-semibold">{username.at(0)?.toUpperCase()}</AvatarFallback>
+          </Avatar>
+          <span className="font-medium">@{username}</span>
+        </Link>
+      </div>
+      
+      <div className="w-[120px] flex justify-center">
+        <div className="flex items-center gap-1.5">
+          <Clock className="size-4 text-muted-foreground" />
+          <span className="font-medium">{Math.ceil(totalTimeSpent)}m</span>
+        </div>
+      </div>
+      
+      <div className="w-[40%] flex flex-wrap justify-end gap-1.5 pl-4">
+        {languages.map((language, index) => {
+          const decorations = getDecorations(language as FileType)
+          return (
+            <span 
+              key={index} 
+              className="inline-flex items-center gap-1 bg-accent/20 hover:bg-accent/40 rounded-sm px-1.5 py-0.5 text-xs font-medium text-accent-foreground transition-all duration-200"
+            >
+              {decorations && decorations.image && (
+                <img src={decorations.image} alt={language} className="size-3" />
+              )}
+              {language}
+            </span>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 export default function Leaderboard({ data, totalHeartbeatsReceived }: { data: LeaderboardEntry[], totalHeartbeatsReceived: number }) {
+  // Split the data into top 3 and the rest
+  const topThree = data.slice(0, 3)
+  const restOfUsers = data.slice(3)
+  
   return (
     <section className="w-full">
       {data.length === 0 && <EmptyLeaderBoard />}
       
       {data.length > 0 && (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {data.map((entry, index) => (
-              <UserCard key={entry.userId} entry={entry} position={index + 1} />
-            ))}
-          </div>
+          {/* Top 3 Cards */}
+          {topThree.length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-xl font-semibold mb-6 text-center">Top Performers</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {topThree.map((entry, index) => (
+                  <UserCard key={entry.userId} entry={entry} position={index + 1} />
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {/* Rest of Users as Rows */}
+          {restOfUsers.length > 0 && (
+            <div className="mt-10">
+              <h2 className="text-xl font-semibold mb-4">Leaderboard</h2>
+              <div className="bg-background/30 backdrop-blur-sm border border-border/30 rounded-md">
+                {/* Headers */}
+                <div className="flex items-center border-b border-border/30 py-3 px-4 bg-accent/5">
+                  <div className="w-[50px] font-medium text-muted-foreground text-sm text-center">Rank</div>
+                  <div className="flex-1 font-medium text-muted-foreground text-sm">User</div>
+                  <div className="w-[120px] font-medium text-muted-foreground text-sm text-center">Time</div>
+                  <div className="w-[40%] font-medium text-muted-foreground text-sm text-right">Languages</div>
+                </div>
+                
+                {/* Rows */}
+                <div className="px-4">
+                  {restOfUsers.map((entry, index) => (
+                    <UserRow key={entry.userId} entry={entry} position={index + 4} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
           
           <div className="mt-16 text-center">
             <p className="text-sm text-muted-foreground">
