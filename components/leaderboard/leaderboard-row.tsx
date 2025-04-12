@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link"
 import { getDecorations } from "@/lib/language"
 import { FileType } from "@/types/lang"
+import { Badge } from "../ui/badge"
 
 interface LeaderboardRowProps {
   position: number
@@ -17,15 +18,15 @@ interface LeaderboardRowProps {
 }
 
 const LanguagePills = ({ languages }: { languages: string[] }) => (
-  <div className="text-right h-full w-full flex items-center justify-end">
+  <div className="text-right h-full w-full flex items-center justify-end gap-2">
     {
       languages.map((language, index) => {
         const decorations = getDecorations(language as FileType)
         return (
-          <span key={index} className="flex items-center justify-center gap-2 bg-gray-200 rounded-full px-2 py-1 text-xs font-medium text-gray-700 mr-2">
+          <Badge key={index} className="flex items-center justify-center gap-2">
             {decorations && decorations.image && <img src={decorations.image} alt={language} className="size-4" />}
             {language}
-          </span>
+          </Badge>
         )
       })
     }
