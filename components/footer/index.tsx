@@ -8,7 +8,7 @@ export default function Footer() {
         href={"https://buymeacoffee.com/mittalsatyansh"}
         target="_blank"
       >
-        [help pay our server costs pls :3]
+        [help pay our server costs ;-;]
       </Link>
       {/* <p className="hidden md:block text-sm"> */}
       {/*   made with {'<3'} by {' '} */}

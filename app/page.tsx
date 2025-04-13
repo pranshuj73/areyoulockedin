@@ -49,7 +49,8 @@ export default async function Home() {
   return (
     <main className="mt-18 p-8 min-h-dvh">
       <h1 className="text-2xl font-bold mb-6">Today's Leaderboard</h1>
-      <Leaderboard data={data} totalHeartbeatsReceived={totalHeartbeatsReceived} />
+      <Leaderboard data={data} />
+      {data.length > 0 && (<p className="text-sm w-full text-center my-24">areyoulocked.in received {totalHeartbeatsReceived} requests today.</p>)}
     </main>
   );
 }

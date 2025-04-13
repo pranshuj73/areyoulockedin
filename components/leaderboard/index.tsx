@@ -9,7 +9,7 @@ import LeaderboardRow from "./leaderboard-row"
 import EmptyLeaderBoard from "./empty-leaderboard"
 import { LeaderboardEntry } from "@/types/leaderboard"
 
-export default function Leaderboard({ data, totalHeartbeatsReceived }: { data: LeaderboardEntry[], totalHeartbeatsReceived: number }) {
+export default function Leaderboard({ data }: { data: LeaderboardEntry[] }) {
   return (
     <section className="text-lg">
       <Table>
@@ -39,8 +39,6 @@ export default function Leaderboard({ data, totalHeartbeatsReceived }: { data: L
 
       </Table>
       {data.length === 0 && <EmptyLeaderBoard />}
-      {data.length > 0 && (<p className="text-sm w-full text-center mt-24">areyoulocked.in received {totalHeartbeatsReceived} requests today.</p>)}
-      
     </section>
   )
 }
