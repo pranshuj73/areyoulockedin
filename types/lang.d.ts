@@ -34,6 +34,7 @@ type Language =
   | "Dart"
   | "Clojure"
   | "Haskell"
+  | "Vue"
   | "R"
   | "SQL"
   | "Shell"      // Generic Shell Script (sh, bash, zsh)

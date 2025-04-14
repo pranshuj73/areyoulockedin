@@ -38,6 +38,7 @@ export const fileExtensionMap: Record<string, FileType> = {
   "lhs": "Haskell",    // Literate Haskell
   "java": "Java",
   "jsp": "Java",       // Java Server Pages (Often contains Java code)
+  "vue": "Vue",
   "js": "JavaScript",
   "mjs": "JavaScript", // ES Modules
   "cjs": "JavaScript", // CommonJS Modules
