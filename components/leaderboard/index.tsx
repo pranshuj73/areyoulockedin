@@ -12,7 +12,7 @@ import { LeaderboardEntry } from "@/types/leaderboard"
 export default function Leaderboard({ data }: { data: LeaderboardEntry[] }) {
   return (
     <section className="text-lg set-mw-center">
-      <h1 className="text-xl font-bold mb-6">Today's Top 100 Cracked</h1>
+      <h1 className="text-xl font-bold mb-6">Today's Leaderboard</h1>
       <Table className="rounded-sm outline outline-border overflow-hidden">
         <TableHeader className="bg-foreground/10 py-4">
           <TableRow className="[&>*]:p-4">

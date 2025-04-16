@@ -51,10 +51,10 @@ export default async function Home() {
   return (
     <main className="mt-18 p-8 min-h-dvh">
       <h1 className="text-center bg-clip-text bg-gradient-to-l from-neutral-400 dark:from-neutral-600 to-neutral-900 dark:to-neutral-100 text-transparent text-4xl font-semibold tracking-wide mt-8 mb-12">
-        Are you as locked in as
+        Are you as locked in as{" "}
         <Link
           className={
-            "hover:bg-foreground/10 w-min px-4 py-2 rounded-full transition-all duration-300 ease-out"
+            "hover:bg-foreground/10 w-min hover:px-4 py-2 rounded-full transition-all duration-300 ease-out"
             + ""
           }
           href={`https://x.com/${top.username}`}
@@ -62,7 +62,7 @@ export default async function Home() {
         >
           @{top.username}
         </Link>
-        ?
+        {" "}?
       </h1>
       <Leaderboard data={data} />
       {data.length > 0 && (<p className="text-sm w-full text-center my-24">areyoulocked.in received {totalHeartbeatsReceived} requests today.</p>)}
