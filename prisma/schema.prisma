@@ -15,6 +15,7 @@ model User {
   sessionKey        String      @unique @default(uuid()) // The currently active session key for this user
   timeEntries       TimeEntry[]                          // Relation to time entries
   createdAt         DateTime    @default(now())          // When the user was created
+  banned            Boolean     @default(false)         // Whether the user is banned
 
   @@index([sessionKey]) // Index for faster lookups during time entry insertion
 }

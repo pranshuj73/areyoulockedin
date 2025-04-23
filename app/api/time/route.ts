@@ -13,6 +13,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    if (timeSpent < 0 || timeSpent > 5) {
+      return NextResponse.json({ error: 'Invalid time chunk received.' }, { status: 400 });
+    }
+
     const language = getLanguage(extension);
 
     if (!language) {
@@ -21,7 +25,10 @@ export async function POST(request: NextRequest) {
     }
 
     const user = await prisma.user.findUnique({
-      where: { sessionKey },
+      where: {
+        sessionKey,
+        banned: false
+      },
     });
 
     if (!user) {
