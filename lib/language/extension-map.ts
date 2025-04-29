@@ -24,6 +24,7 @@ export const fileExtensionMap: Record<string, FileType> = {
   "dart": "Dart",
   "ex": "Elixir",
   "exs": "Elixir",     // Elixir Script
+  "ejs": "JavaScript",
   "elm": "Elm",
   "erl": "Erlang",
   "hrl": "Erlang",     // Erlang Header
