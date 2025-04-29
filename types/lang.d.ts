@@ -1,4 +1,5 @@
 type Language =
+  | "OCaml"
   | "Odin"
   | "Nim"
   | "Julia"
