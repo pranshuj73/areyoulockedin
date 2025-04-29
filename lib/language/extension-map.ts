@@ -56,6 +56,8 @@ export const fileExtensionMap: Record<string, FileType> = {
   "m": "ObjectiveC",   // Objective-C
   "mm": "ObjectiveC",  // Objective-C++
   "odin": "Odin",
+  "ml": "OCaml",
+  "mli": "OCaml",
   "pl": "Perl",
   "pm": "Perl",        // Perl Module
   "php": "PHP",
