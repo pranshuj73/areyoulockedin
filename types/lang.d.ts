@@ -38,6 +38,7 @@ type Language =
   | "Vue"
   | "R"
   | "SQL"
+  | "Shader"
   | "Shell"      // Generic Shell Script (sh, bash, zsh)
   | "PowerShell"
   | "Batch"      // Windows Batch Scripting

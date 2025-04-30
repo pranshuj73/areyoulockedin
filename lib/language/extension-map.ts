@@ -68,6 +68,8 @@ export const fileExtensionMap: Record<string, FileType> = {
   "r": "R",
   "rb": "Ruby",
   "rs": "Rust",
+  "glsl": "Shader",
+  "hlsl": "Shader",
   "scala": "Scala",
   "sc": "Scala",       // Scala Script
   "sh": "Shell",       // Generic Shell
