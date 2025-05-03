@@ -11,10 +11,11 @@ import { LeaderboardEntry } from "@/types/leaderboard"
 
 export default function Leaderboard({ data }: { data: LeaderboardEntry[] }) {
   return (
-    <section className="text-lg">
-      <Table>
-        <TableHeader>
-          <TableRow>
+    <section className="text-lg set-mw-center">
+      <h1 className="text-xl font-bold mb-6">Today's Leaderboard</h1>
+      <Table className="rounded-sm outline outline-border overflow-hidden">
+        <TableHeader className="bg-foreground/10 py-4">
+          <TableRow className="[&>*]:p-4">
             <TableHead className="w-[100px]">Position</TableHead>
             <TableHead>User</TableHead>
             <TableHead className="text-center">Time Today</TableHead>

@@ -8,6 +8,7 @@ import Link from "next/link"
 import { getDecorations } from "@/lib/language"
 import { FileType } from "@/types/lang"
 import { Badge } from "../ui/badge"
+import { DynamicBadge } from "../ui/dynamic-badge"
 
 interface LeaderboardRowProps {
   position: number
@@ -23,10 +24,9 @@ const LanguagePills = ({ languages }: { languages: FileType[] }) => (
       languages.map((language, index) => {
         const decorations = getDecorations(language)
         return (
-          <Badge variant={"secondary"} key={index} className="cursor-default flex items-center justify-center gap-2 dark:bg-primary dark:text-primary-foreground">
+          <DynamicBadge key={index} text={language}>
             {decorations && decorations.image && <img src={decorations.image} alt={language} className="size-4" />}
-            {language}
-          </Badge>
+          </DynamicBadge>
         )
       })
     }
