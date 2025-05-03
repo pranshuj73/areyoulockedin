@@ -23,42 +23,46 @@ export function DynamicBadge({ children, text, className }: DynamicBadgeProps) {
   }
 
   // Generate a color based on the hash
-  const generateColor = (text: string): {bg: string, text: string} => {
+  const generateColor = (text: string): { bg: string, text: string } => {
     let hashValue = 0;
     for (let i = 0; i < text.length; i++) {
       hashValue = text.charCodeAt(i) + ((hashValue << 5) - hashValue);
     }
 
     hashValue = Math.abs(hashValue);
-    const hue = Math.floor((hashValue * 137.508) % 360);
+    const hue1 = Math.floor((hashValue * 137.508) % 360);
+    const hue2 = (hue1 + 30) % 360; // offset for gradient variation
 
     const charCode = text.charCodeAt(0);
-    const saturationBase = 60;
+    const saturationBase = 50;
     const saturationVariance = 5;
     const saturation = saturationBase + (charCode % saturationVariance);
 
     const lightnessBase = 70;
     const lightnessVariance = 10;
-    const lightness = lightnessBase - (charCode % lightnessVariance);
+    const lightness1 = lightnessBase - (charCode % lightnessVariance);
+    const lightness2 = Math.min(lightness1 + 10, 95); // keep within bounds
+
+    const color1 = `hsl(${hue1}, ${saturation}%, ${lightness1}%)`;
+    const color2 = `hsl(${hue2}, ${saturation}%, ${lightness2}%)`;
 
     return {
-      bg:`hsl(${hue}, ${saturation}%, ${lightness}%)`,
-      // text: lightness > 50 ? "text-gray-800" : "text-gray-200",
-      text: "text-gray-800",
-    } ;
+      bg: `linear-gradient(135deg, ${color1}, ${color2})`,
+      text: "text-gray-800", // or dynamically decide this later
+    };
   };
 
 
-  const { bg: bgColor, text: textColorClass } = generateColor(contentText);
+  const { bg: bgGradient, text: textColorClass } = generateColor(contentText);
   // Only apply dynamic colors if not using default variant colors
-  const style = contentText ? { backgroundColor: bgColor } : {}
+  const style = contentText ? { backgroundImage: bgGradient } : {}
 
   return (
     <span className={cn(
-        "cursor-default inline-flex items-center justify-center gap-2 rounded-full px-3 py-1 text-xs font-semibold tracking-wide",
-        textColorClass,
-        className
-      )}
+      "cursor-default inline-flex items-center justify-center gap-2 rounded-full px-3 py-1 text-xs font-semibold tracking-wide",
+      textColorClass,
+      className
+    )}
       style={style}
     >
       {children}
