@@ -471,7 +471,7 @@ export const fileExtensionMap: Record<string, FileType> = {
   "gvy": "Groovy",
   "gyp": "Python",
   "gypi": "Python",
-  "h": "Objective-C",
+  "h": "C",
   "h++": "C++",
   "h.in": "C",
   "ha": "Hare",
