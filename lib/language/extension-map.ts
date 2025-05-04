@@ -578,7 +578,7 @@ export const fileExtensionMap: Record<string, FileType> = {
   "jsh": "Java",
   "jslib": "JavaScript",
   "jsm": "JavaScript",
-  "json": "OASv3-json",
+  "json": "JSON",
   "json-tmlanguage": "JSON",
   "json.example": "JSON",
   "json5": "JSON5",
