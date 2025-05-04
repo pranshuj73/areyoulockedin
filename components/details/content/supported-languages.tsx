@@ -1,26 +1,11 @@
 import DetailsCard from "@/components/ui/details-card";
-import { FileType } from "@/types/lang";
-
-const fileTypes: FileType[] = [
-  'Assembly', 'Batch', 'C', 'C#', 'C++', 'COBOL',
-  'CSS', 'CSV', 'Clojure', 'Dart', 'Dockerfile', 'Elixir',
-  'Elm', 'Erlang', 'F#', 'Flix', 'Gleam', 'Go', 'GraphQL',
-  'Groovy', 'HTML', 'Haskell', 'INI', 'JSON', 'Java', 'JavaScript',
-  'Julia', 'Kotlin', 'Less', 'Lisp', 'Log', 'Lua', 'Makefile', 'Markdown',
-  'Nim', 'Nix', 'ObjectiveC', 'Odin', 'PHP', 'Perl', 'PowerShell', 'Properties',
-  'Python', 'R', 'Ruby', 'Rust', 'SASS', 'SQL', 'Scala', 'Shell', 'Solidity', 'Swift',
-  'TOML', 'TSV', 'Text', 'TypeScript', 'Vue', 'WebAssembly', 'XML', 'YAML', 'Zig'
-];
-
+import Link from "next/link";
 
 export default function SupportedLanguages() {
   return (
     <DetailsCard title="Supported Languages" description="AYLI currents detects & tracks the following languages.">
-      <ul className="list-disc list-inside space-y-1">
-        {fileTypes.map((lang) => (
-          <li key={lang}>{lang}</li>
-        ))}
-      </ul>
+      <p>areyoulocked.in currently supports over 750+ languages based on the languages.yml file from <Link href="https://github.com/github-linguist/linguist" target="_blank">github-linguist</Link> (which is the same library GitHub uses to detect & show languages).</p>
+      <p>To view the entire list of supported languages &amp; file extensions visit this repository: <Link href="https://github.com/areyoulockedin/langs?tab=readme-ov-file#areyoulockedin---supported-file-types" target="_blank">areyoulockedin/langs</Link>.</p>
     </DetailsCard>
   );
 }
