@@ -47,7 +47,7 @@ export function DynamicBadge({ children, text, className }: DynamicBadgeProps) {
     const color2 = `hsl(${hue2}, ${saturation}%, ${lightness2}%)`;
 
     return {
-      bg: `linear-gradient(135deg, ${color1}, ${color2})`,
+      bg: `linear-gradient(135deg, ${color1} 60%, ${color2})`,
       text: "text-gray-800", // or dynamically decide this later
     };
   };
