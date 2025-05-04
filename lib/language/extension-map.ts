@@ -1036,7 +1036,7 @@ export const fileExtensionMap: Record<string, FileType> = {
   "rpgle": "RPGLE",
   "rpy": "Ren'Py",
   "rq": "SPARQL",
-  "rs": "XML",
+  "rs": "Rust",
   "rs.in": "Rust",
   "rsc": "RouterOS Script",
   "rsh": "RenderScript",
