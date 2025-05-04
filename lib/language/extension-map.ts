@@ -1237,7 +1237,7 @@ export const fileExtensionMap: Record<string, FileType> = {
   "twig": "Twig",
   "txi": "Texinfo",
   "txl": "TXL",
-  "txt": "Vim Help File",
+  "txt": "Text",
   "txx": "C++",
   "typ": "XML",
   "uc": "UnrealScript",
