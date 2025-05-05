@@ -49,7 +49,7 @@ export default async function Home() {
   const top = data[0]
 
   return (
-    <main className="mt-18 p-8 min-h-dvh">
+    <main className="mt-18 p-6 sm:p-8 min-h-dvh">
       <h1 className="text-center bg-clip-text bg-gradient-to-l from-neutral-400 dark:from-neutral-600 to-neutral-900 dark:to-neutral-100 text-transparent text-4xl font-semibold tracking-wide mt-8 mb-12">
         Are you as locked in as{" "}
         <Link
