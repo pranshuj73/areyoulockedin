@@ -5,9 +5,9 @@ import {
 import { MedalIcon, TrophyIcon } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link"
-import { getDecorations } from "@/lib/language"
-import { FileType } from "@/types/lang"
-import { Badge } from "../ui/badge"
+import { getDecorations, getMDIIcon } from "@/lib/language"
+import type { FileType } from "@/types/lang"
+import { Icon } from '@iconify/react';
 import { DynamicBadge } from "../ui/dynamic-badge"
 
 interface LeaderboardRowProps {
@@ -23,8 +23,10 @@ const LanguagePills = ({ languages }: { languages: FileType[] }) => (
     {
       languages.map((language, index) => {
         const decorations = getDecorations(language)
+        const icon = getMDIIcon(language)
         return (
           <DynamicBadge key={index} text={language}>
+            {!decorations?.image && (<Icon icon={`mdi:${icon}`} />)}
             {decorations && decorations.image && <img src={decorations.image} alt={language} className="size-4" />}
           </DynamicBadge>
         )

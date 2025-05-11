@@ -41,7 +41,8 @@ export async function POST(request: NextRequest) {
         create: { id: userId, username, profilePictureUrl },
       });
 
-      console.log("User created/udpated with id:", userObj.id, "& username:", userObj.username);
+      const eventType = payload.type.split('.')[1]
+      console.log(`User ${eventType} with id:`, userObj.id, "& username:", userObj.username);
     }
 
     return NextResponse.json({ message: 'payload received successfully!' })
