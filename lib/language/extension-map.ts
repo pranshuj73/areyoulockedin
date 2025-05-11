@@ -1231,7 +1231,7 @@ export const fileExtensionMap: Record<string, FileType> = {
   "tsp": "TypeSpec",
   "tst": "Scilab",
   "tsv": "TSV",
-  "tsx": "XML",
+  "tsx": "TypeScript",
   "ttl": "Turtle",
   "tu": "Turing",
   "twig": "Twig",
