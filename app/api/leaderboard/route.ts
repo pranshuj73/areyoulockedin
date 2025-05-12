@@ -27,7 +27,6 @@ export async function GET(request: NextRequest) {
           timeSpent: 'desc',
         },
       },
-      take: 100, // Limit to top 100
     });
 
     if (aggregatedData.length === 0) {
