@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const now = Date.now();
     const twentyFourHoursAgo = new Date(now - 24 * 60 * 60 * 1000);
@@ -60,30 +60,40 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // 4. Fetch distinct languages for these users within the time frame
+    // 4. Fetch distinct languages and their total time spent for these users within the time frame
     const languageData = await prisma.timeEntry.groupBy({
-        by: ['userId', 'language'],
-        where: {
-            userId: {
-                in: userIds,
-            },
-            timestamp: {
-                gte: twentyFourHoursAgo,
-            },
+      by: ['userId', 'language'],
+      where: {
+        userId: {
+          in: userIds,
         },
-        // We only need the grouping, no aggregates needed here
+        timestamp: {
+          gte: twentyFourHoursAgo,
+        },
+      },
+      _sum: {
+        timeSpent: true, // Aggregate total time spent per language
+      },
     });
 
     // 5. Create maps for efficient lookup
     const userMap = new Map(users.map(user => [user.id, user]));
-    const languageMap = new Map<string, Set<string>>(); // Map<userId, Set<language>>
+    const languageMap = new Map<string, { language: string; timeSpent: number }[]>(); // Map<userId, Array<{ language, timeSpent }>>
 
     // Populate the language map
     for (const entry of languageData) {
-        if (!languageMap.has(entry.userId)) {
-            languageMap.set(entry.userId, new Set());
-        }
-        languageMap.get(entry.userId)?.add(entry.language);
+      if (!languageMap.has(entry.userId)) {
+        languageMap.set(entry.userId, []);
+      }
+      languageMap.get(entry.userId)?.push({
+        language: entry.language,
+        timeSpent: entry._sum.timeSpent ?? 0,
+      });
+    }
+
+    // Sort languages by time spent for each user
+    for (const [_userId, languages] of languageMap.entries()) {
+      languages.sort((a, b) => b.timeSpent - a.timeSpent); // Sort descending by time spent
     }
 
 
@@ -92,7 +102,7 @@ export async function GET(request: NextRequest) {
       const user = userMap.get(agg.userId);
       if (!user) return null; // Should not happen if DB is consistent
 
-      const languages = Array.from(languageMap.get(agg.userId) ?? new Set()); // Get languages from the map
+      const languages = (languageMap.get(agg.userId) ?? []).map(lang => lang.language); // Extract only language names
 
       return {
         userId: user.id,
