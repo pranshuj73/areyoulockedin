@@ -1,47 +1,32 @@
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import LeaderboardRow from "./leaderboard-row"
-import EmptyLeaderBoard from "./empty-leaderboard"
-import { LeaderboardEntry } from "@/types/leaderboard"
+import Table from "@/components/leaderboard/table";
+import { LeaderboardApiResponse } from "@/types/leaderboard";
+import Link from "next/link";
 
-export default function Leaderboard({ data, timeframe }: { data: LeaderboardEntry[], timeframe: "daily" | "weekly" }) {
+interface LeaderboardProps extends LeaderboardApiResponse {
+  timeframe: "daily" | "weekly";
+}
+
+export default async function Leaderboard({ data, totalHeartbeatsReceived, timeframe }: LeaderboardProps) {
+  const top = data[0]
+
   return (
-    <section className="text-lg set-mw-center">
-      <div>
-        <h1 className="text-xl font-bold mb-6">{timeframe} Leaderboard</h1>
-      </div>
-      <Table className="rounded-sm outline outline-border overflow-hidden">
-        <TableHeader className="bg-foreground/10 py-4">
-          <TableRow className="[&>*]:p-4">
-            <TableHead className="w-[100px]">Position</TableHead>
-            <TableHead>User</TableHead>
-            <TableHead className="text-center">Time Today</TableHead>
-            <TableHead className="text-right">Languages</TableHead>
-          </TableRow>
-        </TableHeader>
-
-        {data.length !== 0 && (
-          <TableBody>
-            {data.map((entry, index) => (
-              <LeaderboardRow
-                key={entry.userId}
-                username={entry.username}
-                pfp={entry.profilePictureUrl}
-                position={index + 1}
-                time={entry.totalTimeSpent}
-                languages={entry.languages}
-              />
-            ))}
-          </TableBody>
-        )}
-
-      </Table>
-      {data.length === 0 && <EmptyLeaderBoard />}
-    </section>
-  )
+    <main className="mt-18 p-6 sm:p-8 min-h-dvh">
+      <h1 className="text-center bg-clip-text bg-gradient-to-l from-neutral-400 dark:from-neutral-600 to-neutral-900 dark:to-neutral-100 text-transparent text-4xl font-semibold tracking-wide leading-normal px-4 py-2 mt-8 mb-12">
+        Are you as locked in as{" "}
+        <Link
+          className={
+            "hover:bg-foreground/10 w-min hover:px-4 py-2 rounded-full transition-all duration-300 ease-out"
+            + ""
+          }
+          href={`https://x.com/${top.username}`}
+          target="_blank"
+        >
+          @{top.username}
+        </Link>
+        {" "}?
+      </h1>
+      <Table data={data} timeframe={timeframe} />
+      {data.length > 0 && (<p className="text-sm w-full text-center my-24">areyoulocked.in received {totalHeartbeatsReceived} requests today.</p>)}
+    </main>
+  );
 }

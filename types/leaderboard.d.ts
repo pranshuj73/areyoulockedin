@@ -1,4 +1,4 @@
-import { FileType } from "./lang";
+import { FileType } from "@/types/lang";
 
 export interface LeaderboardEntry {
   userId: string;
@@ -8,3 +8,7 @@ export interface LeaderboardEntry {
   languages: FileType[];
 }
 
+export interface LeaderboardApiResponse {
+  data: LeaderboardEntry[];
+  totalHeartbeatsReceived: number;
+}

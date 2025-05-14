@@ -3,17 +3,22 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function GET(_request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     const now = Date.now();
-    const sevenDaysAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
+    let timeframe = new Date(now - 24 * 60 * 60 * 1000);
+
+    const timeframeParam = request.nextUrl.searchParams.get('timeframe') ?? 'daily';
+    if (timeframeParam === 'weekly') {
+      timeframe = new Date(now - 7 * 24 * 60 * 60 * 1000);
+    }
 
     // 1. Aggregate time spent and count, grouping by userId
     const aggregatedData = await prisma.timeEntry.groupBy({
       by: ['userId'],
       where: {
         timestamp: {
-          gte: sevenDaysAgo,
+          gte: timeframe,
         },
       },
       _sum: {
@@ -31,9 +36,6 @@ export async function GET(_request: NextRequest) {
 
     if (aggregatedData.length === 0) {
       const responseData = { data: [], totalHeartbeatsReceived: 0 };
-      // Optional: Update cache
-      // cache.data = responseData;
-      // cache.timestamp = now;
       return NextResponse.json(responseData, { status: 200 });
     }
 
@@ -68,7 +70,7 @@ export async function GET(_request: NextRequest) {
           in: userIds,
         },
         timestamp: {
-          gte: sevenDaysAgo,
+          gte: timeframe,
         },
       },
       _sum: {
@@ -125,4 +127,3 @@ export async function GET(_request: NextRequest) {
     // await prisma.$disconnect(); // Generally not needed in serverless environments
   }
 }
-
