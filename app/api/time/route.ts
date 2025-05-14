@@ -9,8 +9,13 @@ export async function POST(request: NextRequest) {
     const { sessionKey, timeSpent, extension, timestamp } = await request.json();
     console.log(`received ${timeSpent}m for ext:${extension} by key:${sessionKey} at ${timestamp}`);
 
-    if (!sessionKey || !timeSpent || !extension || !timestamp) {
+    if (!sessionKey || !timeSpent || !extension || extension === 'unknown' || !timestamp) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    if (new Date(timestamp) > new Date(Date.now()) && new Date(timestamp) < new Date(Date.now() - 24 * 60 * 60 * 1000)) {
+      console.log('timestamp cannot be in the future');
+      return NextResponse.json({ error: 'Invalid timestamp received.' }, { status: 400 });
     }
 
     if (timeSpent < 0 || timeSpent > 5) {
@@ -37,6 +42,21 @@ export async function POST(request: NextRequest) {
     }
 
     const roundedTimeSpent = Math.ceil(parseFloat(timeSpent) * 100) / 100;
+
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+    const entriesInLastHour = await prisma.timeEntry.aggregate({
+      _sum: { timeSpent: true },
+      where: {
+        userId: user.id,
+        timestamp: { gte: oneHourAgo },
+      },
+    });
+    const totalTimeInLastHour = entriesInLastHour._sum.timeSpent || 0;
+
+    if (totalTimeInLastHour + roundedTimeSpent > 60) { // Max 60 minutes of activity in any 60 min window
+      console.log(`User ${user.id} exceeded time limit in last hour.`);
+      return NextResponse.json({ error: 'Time logging limit exceeded for the period.' }, { status: 429 });
+    }
 
     const timeEntry = await prisma.timeEntry.create({
       data: {

@@ -31,6 +31,7 @@ model TimeEntry {
   // Relation uses the userId (Clerk User ID) to link to the User table's id field
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([userId, timestamp, language], name: "UserTimestampLanguageUnique")
   @@index([userId, timestamp]) // Index for performance on filtering/sorting leaderboard
   @@index([sessionKey])       // Index if you query by historical session key
 }

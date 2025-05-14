@@ -9,10 +9,12 @@ import LeaderboardRow from "./leaderboard-row"
 import EmptyLeaderBoard from "./empty-leaderboard"
 import { LeaderboardEntry } from "@/types/leaderboard"
 
-export default function Leaderboard({ data }: { data: LeaderboardEntry[] }) {
+export default function Leaderboard({ data, timeframe }: { data: LeaderboardEntry[], timeframe: "daily" | "weekly" }) {
   return (
     <section className="text-lg set-mw-center">
-      <h1 className="text-xl font-bold mb-6">Today's Leaderboard</h1>
+      <div>
+        <h1 className="text-xl font-bold mb-6">{timeframe} Leaderboard</h1>
+      </div>
       <Table className="rounded-sm outline outline-border overflow-hidden">
         <TableHeader className="bg-foreground/10 py-4">
           <TableRow className="[&>*]:p-4">
