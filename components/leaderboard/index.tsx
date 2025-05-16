@@ -26,7 +26,7 @@ export default async function Leaderboard({ data, totalHeartbeatsReceived, timef
         {" "}?
       </h1>
       <Table data={data} timeframe={timeframe} />
-      {data.length > 0 && (<p className="text-sm w-full text-center my-24">areyoulocked.in received {totalHeartbeatsReceived} requests today.</p>)}
+      {data.length > 0 && (<p className="text-sm w-full text-center my-24">areyoulocked.in received {totalHeartbeatsReceived} requests {timeframe === "daily" ? "today" : "this week"}.</p>)}
     </main>
   );
 }

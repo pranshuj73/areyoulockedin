@@ -14,7 +14,7 @@ export default function LeaderboardTable({ data, timeframe }: { data: Leaderboar
   return (
     <section className="text-lg set-mw-center">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl capitalize font-bold">{timeframe} Leaderboard</h1>
+        <h1 className="text-xl capitalize font-bold">{timeframe === "daily" ? "Today's" : "Weekly"} Leaderboard</h1>
 
         <div className="text-sm flex flex-nowrap border-2 py-1 px-2 rounded-sm overflow-hidden relative">
           <div className={`absolute min-w-26 h-full rounded-full bg-border top-0 ${timeframe === "daily" ? "left-0" : "right-0"} z-0`} />
