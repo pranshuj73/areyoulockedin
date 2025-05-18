@@ -16,10 +16,10 @@ export default function LeaderboardTable({ data, timeframe }: { data: Leaderboar
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl capitalize font-bold">{timeframe === "daily" ? "Today's" : "Weekly"} Leaderboard</h1>
 
-        <div className="text-sm flex flex-nowrap border-2 py-1 px-2 rounded-sm overflow-hidden relative">
-          <div className={`absolute min-w-26 h-full rounded-full bg-border top-0 ${timeframe === "daily" ? "left-0" : "right-0"} z-0`} />
-          <Link className="min-w-22 text-center z-10" href="/">Daily</Link>
-          <Link className="min-w-22 text-center z-10" href="/weekly">Weekly</Link>
+        <div className="text-sm flex flex-nowrap border-2 py-1 rounded-sm overflow-hidden relative">
+          <div className={`absolute min-w-22 lg:min-w-24 h-full rounded-full bg-border top-0 ${timeframe === "daily" ? "left-0" : "right-0"} z-0`} />
+          <Link className="min-w-20 lg:min-w-22 text-center z-10" href="/">Daily</Link>
+          <Link className="min-w-20 lg:min-w-22 text-center z-10" href="/weekly">Weekly</Link>
         </div>
 
       </div>
