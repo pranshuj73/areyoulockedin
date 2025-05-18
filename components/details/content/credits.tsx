@@ -22,12 +22,7 @@ export default function Credits() {
       <p>Server Sugar Daddies (thank you for funding our uptime)</p>
       <ul className="list-disc list-inside space-y-1">
         <Contributor name="heyayushh" />
-      </ul>
-
-      <p>Brand Ambassadors (shitposting is a full-time job)</p>
-      <ul className="list-disc list-inside space-y-1">
-        <Contributor name="damnGruz" />
-        <Contributor name="shivangitwt" />
+        <Contributor name="valhalla_dev" />
       </ul>
 
       <p>Unpaid QA Interns (early testers, enjoyers of chaos)</p>
@@ -41,7 +36,7 @@ export default function Credits() {
         <Contributor name="sanatan_dive" />
         <Contributor name="namishh__" />
         <Contributor name="reallyrawn" />
-        <Contributor name="damnGruz" />
+        <Contributor name="gruzBuilds" />
       </ul>
 
       <p>Feedback Gang (thank you for making us better)</p>
