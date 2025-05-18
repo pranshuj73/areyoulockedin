@@ -18,11 +18,11 @@ export default function UserRank({ data }: { data: LeaderboardEntry[] }) {
     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     // Temporary highlight
-    const highlightClasses = ['bg-blue-100/50', 'dark:bg-blue-100/20']
+    const highlightClasses = ['bg-blue-100/50', 'dark:bg-blue-100/10']
     el.classList.add(...highlightClasses);
     setTimeout(() => {
       el.classList.remove(...highlightClasses);
-    }, 1500);
+    }, 1000);
   }
 
   const { isLoaded, isSignedIn, user } = useUser();
@@ -51,13 +51,18 @@ export default function UserRank({ data }: { data: LeaderboardEntry[] }) {
       onClick={handleScrollToUser}
     >
       <Avatar className="relative">
-        <div className="rounded-full size-8 absolute top-1/2 left-1/2 -translate-x-[150%] translate-y-full group-hover:-translate-1/2 z-50 bg-blue-400 flex items-center justify-center overflow-hidden transition-all duration-200 ease-in">
-          <ArrowUpRight className="size-5 text-foreground" />
+        <div className={cn(
+          "absolute top-1/2 left-1/2 -translate-1/2 opacity-0 group-hover:opacity-100 z-50",
+          "size-8  bg-blue-400 flex items-center justify-center overflow-hidden rounded-full",
+          "transition-all duration-100 ease-in"
+        )}>
+
+          <ArrowUpRight className="mt-4 mr-4 group-hover:mt-0 group-hover:mr-0 size-5 text-foreground transition-all duration-100 ease-in" />
         </div>
         <AvatarImage src={pfp} />
         <AvatarFallback>{username.at(0)}</AvatarFallback>
       </Avatar>
       <span className="text-nowrap text-accent-foreground/80 font-semibold text-sm">{formattedRank}</span>
-    </button>
+    </button >
   )
 }

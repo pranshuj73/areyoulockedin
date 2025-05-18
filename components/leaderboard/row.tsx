@@ -47,7 +47,7 @@ const User = ({ username, pfp }: { username: string, pfp?: string }) => (
 
 export default function LeaderboardRow({ position, username, time, languages, pfp }: LeaderboardRowProps) {
   return (
-    <TableRow id={username} className="transition-all duration-300 ease-in-out">
+    <TableRow id={username} className="transition-all duration-300 ease-in">
       <TableCell className="font-medium text-center flex items-center justify-center py-6">
         {position === 1 ? <TrophyIcon className="size-5 mr-2 -ml-7" /> : position === 2 || position === 3 ? <MedalIcon className="size-5 mr-2 -ml-7" /> : null}
         #{position}
