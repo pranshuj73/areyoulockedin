@@ -51,7 +51,7 @@ export default function UserRank({ data }: { data: LeaderboardEntry[] }) {
       onClick={handleScrollToUser}
     >
       <Avatar className="relative">
-        <div className="rounded-full size-8 absolute top-1/2 left-1/2 -translate-x-[150%] translate-y-full group-hover:-translate-1/2 z-50 bg-blue-400 flex items-center justify-center overflow-hidden transition-all duration-100 ease-in">
+        <div className="rounded-full size-8 absolute top-1/2 left-1/2 -translate-x-[150%] translate-y-full group-hover:-translate-1/2 z-50 bg-blue-400 flex items-center justify-center overflow-hidden transition-all duration-200 ease-in">
           <ArrowUpRight className="size-5 text-foreground" />
         </div>
         <AvatarImage src={pfp} />
