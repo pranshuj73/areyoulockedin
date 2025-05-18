@@ -12,12 +12,12 @@ import Link from "next/link"
 
 export default function LeaderboardTable({ data, timeframe }: { data: LeaderboardEntry[], timeframe: "daily" | "weekly" }) {
   return (
-    <section className="text-lg set-mw-center">
+    <section className="text-lg set-mw-center snap-y">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl capitalize font-bold">{timeframe === "daily" ? "Today's" : "Weekly"} Leaderboard</h1>
 
         <div className="text-sm flex flex-nowrap border-2 py-1 rounded-sm overflow-hidden relative">
-          <div className={`absolute min-w-22 lg:min-w-24 h-full rounded-full bg-border top-0 ${timeframe === "daily" ? "left-0" : "right-0"} z-0`} />
+          <div className={`absolute min-w-20 lg:min-w-22 h-full rounded-full bg-border top-0 ${timeframe === "daily" ? "left-0" : "right-0"} z-0`} />
           <Link className="min-w-20 lg:min-w-22 text-center z-10" href="/">Daily</Link>
           <Link className="min-w-20 lg:min-w-22 text-center z-10" href="/weekly">Weekly</Link>
         </div>
@@ -50,6 +50,7 @@ export default function LeaderboardTable({ data, timeframe }: { data: Leaderboar
 
       </Table>
       {data.length === 0 && <EmptyLeaderBoard />}
+
     </section>
   )
 }

@@ -1,6 +1,8 @@
 import Table from "@/components/leaderboard/table";
 import { LeaderboardApiResponse } from "@/types/leaderboard";
+import { SignedIn } from "@clerk/nextjs";
 import Link from "next/link";
+import UserRank from "./user-rank";
 
 interface LeaderboardProps extends LeaderboardApiResponse {
   timeframe: "daily" | "weekly";
@@ -27,6 +29,11 @@ export default async function Leaderboard({ data, totalHeartbeatsReceived, timef
       </h1>
       <Table data={data} timeframe={timeframe} />
       {data.length > 0 && (<p className="text-sm w-full text-center my-24">areyoulocked.in received {totalHeartbeatsReceived} requests {timeframe === "daily" ? "today" : "this week"}.</p>)}
+
+
+      <SignedIn>
+        <UserRank data={data} />
+      </SignedIn>
     </main>
   );
 }
