@@ -32,8 +32,6 @@ export default function UserRank({ data }: { data: LeaderboardEntry[] }) {
 
   const { username, imageUrl: pfp } = user;
   const rank = data.findIndex((entry) => entry.username === username);
-  console.log(rank)
-
 
   const disabled = rank === -1
   const formattedRank = !disabled ? "Currently #" + String(rank + 1).padStart(3, "0") : "Currently UNRANKED";

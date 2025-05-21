@@ -213,6 +213,7 @@ export const fileExtensionMap: Record<string, FileType> = {
   "coffee.md": "Literate CoffeeScript",
   "com": "DIGITAL Command Language",
   "command": "Shell",
+  "conf": "Shell",
   "conll": "CoNLL-U",
   "conllu": "CoNLL-U",
   "containerfile": "Dockerfile",
