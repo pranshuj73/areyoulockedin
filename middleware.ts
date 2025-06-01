@@ -15,9 +15,9 @@ try {
   ratelimit = new Ratelimit({
     redis: redis,
     // Limit: 4 requests from the same identifier (IP or sessionKey) within a 60-second window
-    limiter: Ratelimit.slidingWindow(4, '60 s'),
-    analytics: true, // Optional: Enable analytics tracking in Upstash
-    prefix: '@upstash/ratelimit', // Optional: Custom prefix for keys (updated slightly)
+    limiter: Ratelimit.fixedWindow(4, '60 s'),
+    analytics: false,
+    prefix: '@upstash/ratelimit',
   });
   console.log("Upstash Ratelimit initialized successfully.");
 
@@ -113,15 +113,10 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
 
     } catch (error) {
       console.error("Error during Upstash rate limiting check:", error);
-      // If the rate limiter fails unexpectedly (e.g., Redis connection issue),
-      // decide whether to block or allow. Allowing is often safer (fail-open).
-      return NextResponse.next(); // Allow request if rate limiter itself fails
+      return NextResponse.next();
     }
   }
 
-  // For non-API routes or if ratelimit failed to initialize,
-  // let Clerk handle authentication based on its configuration.
-  // Returning undefined delegates control back to Clerk's default behavior.
   return undefined;
 });
 
