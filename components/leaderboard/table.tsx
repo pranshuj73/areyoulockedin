@@ -28,7 +28,7 @@ export default function LeaderboardTable({ data, timeframe }: { data: Leaderboar
           <TableRow className="[&>*]:p-4">
             <TableHead className="w-[100px]">Position</TableHead>
             <TableHead>User</TableHead>
-            <TableHead className="text-center">Time Today</TableHead>
+            <TableHead className="text-center">{timeframe === "daily" ? "Time Today": "Time This Week"}</TableHead>
             <TableHead className="text-right">Languages</TableHead>
           </TableRow>
         </TableHeader>
@@ -43,6 +43,7 @@ export default function LeaderboardTable({ data, timeframe }: { data: Leaderboar
                 position={index + 1}
                 time={entry.totalTimeSpent}
                 languages={entry.languages}
+                timeframe={timeframe}
               />
             ))}
           </TableBody>

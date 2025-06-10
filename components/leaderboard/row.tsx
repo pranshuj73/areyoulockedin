@@ -9,6 +9,7 @@ import { getDecorations, getMDIIcon } from "@/lib/language"
 import type { FileType } from "@/types/lang"
 import { Icon } from '@iconify/react';
 import { DynamicBadge } from "../ui/dynamic-badge"
+import { formatTimeSpent } from "@/lib/time"
 
 interface LeaderboardRowProps {
   position: number
@@ -16,6 +17,7 @@ interface LeaderboardRowProps {
   time: number
   languages: FileType[]
   pfp?: string
+  timeframe: "daily" | "weekly"
 }
 
 const LanguagePills = ({ languages }: { languages: FileType[] }) => (
@@ -36,7 +38,10 @@ const LanguagePills = ({ languages }: { languages: FileType[] }) => (
 )
 
 const User = ({ username, pfp }: { username: string, pfp?: string }) => (
-  <Link className="flex items-center gap-2 hover:bg-foreground/10 w-min pl-1 pr-3 py-1 -my-1 rounded-full transition-all duration-300 ease-out" href={`https://x.com/${username}`} target="_blank">
+  <Link
+    className="flex items-center gap-2 hover:bg-foreground/10 w-min pl-1 pr-3 py-1 -my-1 rounded-full transition-all duration-300 ease-out"
+    href={`/@${username}`}
+  >
     <Avatar>
       <AvatarImage src={pfp} />
       <AvatarFallback>{username.at(0)}</AvatarFallback>
@@ -45,7 +50,7 @@ const User = ({ username, pfp }: { username: string, pfp?: string }) => (
   </Link>
 )
 
-export default function LeaderboardRow({ position, username, time, languages, pfp }: LeaderboardRowProps) {
+export default function LeaderboardRow({ position, username, time, languages, pfp, timeframe }: LeaderboardRowProps) {
   return (
     <TableRow id={username} className="transition-all duration-300 ease-in">
       <TableCell className="font-medium text-center flex items-center justify-center py-6">
@@ -55,7 +60,9 @@ export default function LeaderboardRow({ position, username, time, languages, pf
       <TableCell className={"font-semibold"}>
         <User username={username} pfp={pfp} />
       </TableCell>
-      <TableCell className="text-center">{Math.ceil(time)}m</TableCell>
+      <TableCell className="text-center">
+        {timeframe === "weekly" ? formatTimeSpent(time) : `${Math.ceil(time)}m`}
+      </TableCell>
       <TableCell className="text-right w-full max-w-[60%]">
         <LanguagePills languages={languages} />
       </TableCell>
