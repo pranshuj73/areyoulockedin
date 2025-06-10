@@ -111,7 +111,7 @@ export default function StatsCards({ dailyStats, weeklyStats }: StatsCardsProps)
 
       <div className="bg-foreground/5 p-4 rounded-lg">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-lg font-semibold">Top Languages</h2>
+          <h2 className="text-lg font-semibold">Top Languages This Week</h2>
           {/* <span className="text">Week</span> */}
         </div>
         {weeklyStats.languages && weeklyStats.languages.length > 0 ? (

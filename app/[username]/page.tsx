@@ -25,7 +25,7 @@ function LanguageStat({ language, timeSpent }: LanguageStatProps) {
   return (
     <div className="flex items-center justify-between group">
       <div className="flex items-center gap-3">
-        <div 
+        <div
           className="size-5 rounded-md flex items-center justify-center transition-colors"
           style={{ backgroundImage: bgGradient }}
         >
@@ -61,7 +61,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
   const weeklyStats = await getUserDataWeekly(user.id);
 
   return (
-    <main className="mt-32 p-6 sm:p-8 set-mw-center min-h-dvh">
+    <main className="mt-20 md:mt-32 mb-20 p-6 sm:p-8 set-mw-center min-h-dvh">
       <Link
         href="/"
         className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
@@ -71,15 +71,15 @@ export default async function Page({ params }: { params: Promise<{ username: str
       </Link>
 
       <UserActivitySection userId={user.id}>
-        <div className="flex items-center w-full gap-1 mt-4">
-          <Avatar className="rounded-full overflow-hidden size-13 ml-8 mr-3 border-2 border-background">
+        <div className="flex items-center w-full gap-1">
+          <Avatar className="rounded-full overflow-hidden size-13 mr-3 border-2 border-background">
             <AvatarImage src={user.profilePictureUrl} />
             <AvatarFallback>{user.username.at(0)}</AvatarFallback>
           </Avatar>
           <div>
             <h1 className="text-xl font-mono">@{user.username}</h1>
             <p className="text-sm text-muted-foreground">
-              Locked in since {new Date(user.createdAt).toLocaleDateString()}
+              Joined {new Date(user.createdAt).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}
             </p>
           </div>
         </div>

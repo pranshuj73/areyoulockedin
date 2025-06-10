@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState, ReactNode } from "react";
-import StreaksCard from "@/components/user/streaks-card";
 import ActivityGraph from "@/components/user/activity-graph";
-import { StreaksCardSkeleton } from "@/components/user/streaks-card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { FlameIcon, TrophyIcon } from "lucide-react";
 
 interface ActivityData {
   date: string;
@@ -54,7 +53,6 @@ export default function UserActivitySection({ userId, children }: UserActivitySe
           </div>
         </div>
         {children}
-        <StreaksCardSkeleton />
       </div>
     );
   }
@@ -64,8 +62,34 @@ export default function UserActivitySection({ userId, children }: UserActivitySe
   return (
     <div className="space-y-4">
       <ActivityGraph activity={data.activity} />
-      {children}
-      <StreaksCard currentStreak={data.currentStreak} longestStreak={data.longestStreak} />
+      <div className="flex flex-col md:flex-row md:items-center justify-center gap-4 w-full mt-8">
+        {children}
+
+        <div className="flex flex-nowrap gap-8 w-full md:w-fit text-nowrap">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-full bg-orange-500/10">
+              <FlameIcon className="size-6 text-orange-500" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-lg font-medium">
+                {data.currentStreak} day{data.currentStreak !== 1 ? 's' : ''}
+              </span>
+              <span className="text-sm text-muted-foreground">Current Streak</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-full bg-yellow-500/10">
+              <TrophyIcon className="size-6 text-yellow-500" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-lg font-medium">
+                {data.longestStreak} day{data.longestStreak !== 1 ? 's' : ''}
+              </span>
+              <span className="text-sm text-muted-foreground">Longest Streak</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 } 
