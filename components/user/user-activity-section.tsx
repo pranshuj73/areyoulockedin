@@ -23,7 +23,12 @@ export default function UserActivitySection({ userId, children }: UserActivitySe
   useEffect(() => {
     async function fetchActivity() {
       try {
-        const response = await fetch(`/api/user/activity?userId=${userId}`);
+        const response = await fetch(`/api/user/activity?userId=${userId}`, {
+          next: {
+            revalidate: 43200, // 12 hours in seconds
+            tags: [`user-activity-${userId}`],
+          }
+        });
         if (!response.ok) throw new Error('Failed to fetch activity data');
         const activityData = await response.json();
         setData(activityData);

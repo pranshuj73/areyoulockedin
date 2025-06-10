@@ -43,8 +43,9 @@ function LanguageStat({ language, timeSpent }: LanguageStatProps) {
   );
 }
 
-export default async function Page({ params }: { params: { username: string } }) {
-  const username = decodeURIComponent(params.username);
+export default async function Page({ params }: { params: Promise<{ username: string }> }) {
+  const { username: paramUsername } = await params;
+  const username = decodeURIComponent(paramUsername);
   if (!username.startsWith("@")) {
     notFound();
   }
@@ -61,7 +62,7 @@ export default async function Page({ params }: { params: { username: string } })
 
   return (
     <main className="mt-32 p-6 sm:p-8 set-mw-center min-h-dvh">
-      <Link 
+      <Link
         href="/"
         className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
       >
