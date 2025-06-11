@@ -12,9 +12,16 @@ export async function GET(request: NextRequest) {
 
   // Get start of year and current date
   const now = new Date();
-  const startOfYear = new Date(now.getFullYear(), 0, 1); // January 1st
-  const endOfToday = new Date(now);
-  endOfToday.setHours(23, 59, 59, 999);
+  const currentYear = now.getFullYear();
+  
+  // Create dates in local timezone
+  const startOfYear = new Date(currentYear, 0, 1);
+  const endOfYear = new Date(currentYear + 1, 0, 1);
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  console.log('Current year:', now.getFullYear());
+  console.log('Start of year:', startOfYear.toISOString());
+  console.log('End of year:', endOfYear.toISOString());
 
   // Fetch activity data for the current year up to today
   const activityData = await prisma.timeEntry.groupBy({
@@ -23,7 +30,7 @@ export async function GET(request: NextRequest) {
       userId,
       timestamp: {
         gte: startOfYear,
-        lte: endOfToday,
+        lte: endOfYear,
       },
     },
     _count: {
@@ -38,18 +45,30 @@ export async function GET(request: NextRequest) {
     dailyActivity.set(date, (dailyActivity.get(date) || 0) + entry._count.timestamp);
   });
 
-  // Create array with all days from start of year to today
+  // Create array with all days from start of year to end of year
   const allDays: { date: string; count: number }[] = [];
   const currentDate = new Date(startOfYear);
   
-  while (currentDate <= endOfToday) {
+  // Add one more day to ensure we include December 31st
+  const lastDate = new Date(endOfYear);
+  lastDate.setDate(lastDate.getDate() + 1);
+  
+  while (currentDate < lastDate) {
     const dateStr = currentDate.toISOString().split('T')[0];
-    allDays.push({
-      date: dateStr,
-      count: dailyActivity.get(dateStr) || 0
-    });
+    const isFutureDate = currentDate > today;
+    
+    // Ensure we only include dates from the current year
+    if (dateStr.startsWith(currentYear.toString())) {
+      allDays.push({
+        date: dateStr,
+        count: isFutureDate ? -1 : (dailyActivity.get(dateStr) || 0)
+      });
+    }
     currentDate.setDate(currentDate.getDate() + 1);
   }
+
+  console.log('First date in allDays:', allDays[0]?.date);
+  console.log('Last date in allDays:', allDays[allDays.length - 1]?.date);
 
   // Calculate current streak
   let currentStreak = 0;
@@ -57,8 +76,6 @@ export async function GET(request: NextRequest) {
   let tempStreak = 0;
 
   // Calculate streaks
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
   const todayStr = today.toISOString().split('T')[0];
   const yesterdayStr = new Date(today.getTime() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 

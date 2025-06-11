@@ -16,7 +16,7 @@ export default function ActivityGraph({ activity }: ActivityGraphProps) {
     <div className="bg-foreground/10 rounded-sm">
       <div className="p-4">
         <div className="overflow-x-auto">
-          <div 
+          <div
             className="grid gap-1"
             style={{
               gridTemplateColumns: 'repeat(53, 0.75rem)', // 0.75rem = 12px
@@ -30,8 +30,8 @@ export default function ActivityGraph({ activity }: ActivityGraphProps) {
                 className={cn(
                   "size-3 rounded transition-colors",
                   day.count > 0
-                    ? "bg-green-500/20 hover:bg-green-500/30"
-                    : "bg-foreground/5 hover:bg-foreground/10"
+                    ? "bg-cyan-500/50 hover:bg-cyan-500/100"
+                    : day.count > -1 ? "bg-foreground/15 hover:bg-foreground/30" : "bg-foreground/5 hover:bg-foreground/20"
                 )}
                 title={`${day.date}`}
               />
