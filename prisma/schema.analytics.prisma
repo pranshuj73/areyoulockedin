@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/analytics"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("ANALYTICS_DATABASE_URL")
+}
+
+model User {
+  // Use Clerk's user ID as the primary key for our User table
+  id                String      @id                      // No default, value comes from Clerk
+  username          String      @unique                  // Store username from Clerk
+  profilePictureUrl String?                              // Store profile picture URL from Clerk
+  sessionKey        String      @unique @default(uuid()) // The currently active session key for this user
+  createdAt         DateTime    @default(now())          // When the user was created
+  banned            Boolean     @default(false)         // Whether the user is banned
+
+  // Aggregated data relations
+  dailyStats        DailyStats[]
+  weeklyStats       WeeklyStats[]
+  userActivity      UserActivity[]
+
+  @@index([sessionKey]) // Index for faster lookups during time entry insertion
+}
+
+// Daily aggregated statistics
+model DailyStats {
+  id          Int      @id @default(autoincrement())
+  userId      String   // Clerk user ID
+  date        DateTime // Date (YYYY-MM-DD)
+  totalTime   Float    // Total time spent in minutes
+  languages   Json     // Language breakdown as JSON
+  heartbeats  Int      // Number of heartbeats received
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date])
+  @@index([date])
+}
+
+// Weekly aggregated statistics
+model WeeklyStats {
+  id          Int      @id @default(autoincrement())
+  userId      String   // Clerk user ID
+  weekStart   DateTime // Start of week (Monday)
+  totalTime   Float    // Total time spent in minutes
+  languages   Json     // Language breakdown as JSON
+  heartbeats  Int      // Number of heartbeats received
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, weekStart])
+  @@index([userId, weekStart])
+  @@index([weekStart])
+}
+
+// User activity tracking for streaks and patterns
+model UserActivity {
+  id          Int      @id @default(autoincrement())
+  userId      String   // Clerk user ID
+  date        DateTime // Date (YYYY-MM-DD)
+  isActive    Boolean  // Whether user was active on this date
+  totalTime   Float    // Total time spent on this date
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date])
+  @@index([date])
+}

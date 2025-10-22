@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { analyticsDb } from '@/lib/db';
 
 export async function GET(request: NextRequest) {
   const userId = request.nextUrl.searchParams.get('userId');
@@ -23,26 +21,25 @@ export async function GET(request: NextRequest) {
   console.log('Start of year:', startOfYear.toISOString());
   console.log('End of year:', endOfYear.toISOString());
 
-  // Fetch activity data for the current year up to today
-  const activityData = await prisma.timeEntry.groupBy({
-    by: ['timestamp'],
+  // Fetch activity data from AnalyticsDB
+  const activityData = await analyticsDb.userActivity.findMany({
     where: {
       userId,
-      timestamp: {
+      date: {
         gte: startOfYear,
         lte: endOfYear,
       },
     },
-    _count: {
-      timestamp: true,
+    orderBy: {
+      date: 'asc',
     },
   });
 
   // Group by date and sum the counts
   const dailyActivity = new Map<string, number>();
   activityData.forEach(entry => {
-    const date = entry.timestamp.toISOString().split('T')[0];
-    dailyActivity.set(date, (dailyActivity.get(date) || 0) + entry._count.timestamp);
+    const date = entry.date.toISOString().split('T')[0];
+    dailyActivity.set(date, entry.isActive ? 1 : 0);
   });
 
   // Create array with all days from start of year to end of year

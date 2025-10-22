@@ -1,37 +1,9 @@
+// This file serves as the main Prisma configuration
+// Individual schemas are defined in schema.ingest.prisma and schema.analytics.prisma
+
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-model User {
-  // Use Clerk's user ID as the primary key for our User table
-  id                String      @id                      // No default, value comes from Clerk
-  username          String      @unique                  // Store username from Clerk
-  profilePictureUrl String?                              // Store profile picture URL from Clerk
-  sessionKey        String      @unique @default(uuid()) // The currently active session key for this user
-  timeEntries       TimeEntry[]                          // Relation to time entries
-  createdAt         DateTime    @default(now())          // When the user was created
-  banned            Boolean     @default(false)         // Whether the user is banned
-
-  @@index([sessionKey]) // Index for faster lookups during time entry insertion
-}
-
-model TimeEntry {
-  id          Int      @id @default(autoincrement())
-  userId      String   // the user id (clerk id)
-  sessionKey  String   // The specific session key used when this entry was created
-  timeSpent   Float    // Time spent in this entry
-  language    String   // Language used
-  timestamp   DateTime // When the entry was recorded
-
-  // Relation uses the userId (Clerk User ID) to link to the User table's id field
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, timestamp, language], name: "UserTimestampLanguageUnique")
-  @@index([userId, timestamp]) // Index for performance on filtering/sorting leaderboard
-  @@index([sessionKey])       // Index if you query by historical session key
-}
+// This is a placeholder - the actual database configurations
+// are in schema.ingest.prisma (Turso) and schema.analytics.prisma (Neon)

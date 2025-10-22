@@ -1,9 +1,8 @@
 import { UserJSON, WebhookEvent } from '@clerk/nextjs/server'
 import { Webhook } from 'svix'
-import { PrismaClient } from '@prisma/client';
+import { analyticsDb } from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
 
-const prisma = new PrismaClient();
 const webhookSecret = process.env.CLERK_WEBHOOK_SECRET || ``
 
 async function validateRequest(request: NextRequest) {
@@ -35,7 +34,7 @@ export async function POST(request: NextRequest) {
       }
 
       // now handle user creation
-      const userObj = await prisma.user.upsert({
+      const userObj = await analyticsDb.user.upsert({
         where:  { id: userId },
         update: { username, profilePictureUrl },
         create: { id: userId, username, profilePictureUrl },

@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
-import { PrismaClient } from '@prisma/client';
+import { analyticsDb } from '@/lib/db';
 import { currentUser } from '@clerk/nextjs/server';
-
-const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,7 +19,7 @@ export async function POST(request: NextRequest) {
 
     const sessionKey = uuidv4();
 
-    const dbUser = await prisma.user.update({
+    const dbUser = await analyticsDb.user.update({
       where: { id: userId },
       data: { sessionKey },
     });
