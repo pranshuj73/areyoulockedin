@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Output standalone for Vercel
+  output: 'standalone',
+  
   webpack: (config, { isServer }) => {
     // Exclude libSQL packages from client-side bundle since they're server-only
     if (!isServer) {
@@ -22,6 +25,9 @@ const nextConfig: NextConfig = {
           '@prisma/adapter-libsql': 'commonjs @prisma/adapter-libsql',
         });
       }
+      
+      // Include Prisma engine binaries
+      config.externals.push('_http_common');
     }
     
     // Ignore specific problematic files
@@ -38,6 +44,11 @@ const nextConfig: NextConfig = {
     });
     
     return config;
+  },
+  
+  // Ensure Prisma binaries are included
+  outputFileTracingIncludes: {
+    '/api/**/*': ['./node_modules/.prisma/**/*'],
   },
 };
 

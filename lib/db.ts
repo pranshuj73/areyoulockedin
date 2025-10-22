@@ -1,17 +1,26 @@
 import 'server-only';
 import { PrismaClient as AnalyticsClient } from '../node_modules/.prisma/analytics';
 
-// AnalyticsDB (Neon) - for aggregated data and reads
-export const analyticsDb = new AnalyticsClient({
-  log: process.env.NODE_ENV === 'development' ? ['query', 'info', 'warn', 'error'] : ['error'],
-});
+// Singleton pattern for AnalyticsDB (Neon) - for aggregated data and reads
+// See: https://www.prisma.io/docs/orm/more/help-and-troubleshooting/nextjs-help
+const globalForAnalytics = global as unknown as { analyticsDb: AnalyticsClient };
+
+export const analyticsDb =
+  globalForAnalytics.analyticsDb ||
+  new AnalyticsClient({
+    log: process.env.NODE_ENV === 'development' ? ['query', 'info', 'warn', 'error'] : ['error'],
+  });
+
+if (process.env.NODE_ENV !== 'production') {
+  globalForAnalytics.analyticsDb = analyticsDb;
+}
 
 // IngestDB (Turso) - for high-frequency writes
 // Using dynamic import to avoid bundling issues
-let ingestDb: any;
+const globalForIngest = global as unknown as { ingestDb: any };
 
 export async function getIngestDb() {
-  if (!ingestDb) {
+  if (!globalForIngest.ingestDb) {
     // Dynamic import to avoid webpack bundling issues
     const { PrismaClient: IngestClient } = await import('../node_modules/.prisma/ingest');
     const { PrismaLibSQL } = await import('@prisma/adapter-libsql');
@@ -21,13 +30,13 @@ export async function getIngestDb() {
       authToken: process.env.TURSO_AUTH_TOKEN!,
     });
 
-    ingestDb = new IngestClient({
+    globalForIngest.ingestDb = new IngestClient({
       // @ts-expect-error - Type mismatch between adapter versions
       adapter: tursoAdapter,
       log: process.env.NODE_ENV === 'development' ? ['query', 'info', 'warn', 'error'] : ['error'],
     });
   }
-  return ingestDb;
+  return globalForIngest.ingestDb;
 }
 
 // Graceful shutdown
