@@ -29,10 +29,14 @@ try {
 export default clerkMiddleware(async (auth, req: NextRequest) => {
   const pathname = req.nextUrl.pathname;
 
+  // Exclude internal cron/system endpoints from rate limiting
+  const excludedPaths = ['/api/aggregate', '/api/webhooks/clerk/user-events'];
+  const isExcluded = excludedPaths.some(path => pathname.startsWith(path));
+
   // TODO: update this logic to check only for the post req apis (dont want the leaderboard api to be limited)
   const isApiRoute = pathname.startsWith('/api');
 
-  if (isApiRoute && ratelimit) {
+  if (isApiRoute && !isExcluded && ratelimit) {
     let identifier: string | null = null;
     let identifierType: 'Header' | 'IP' | 'Fallback' = 'Fallback'; // Track the source
 
