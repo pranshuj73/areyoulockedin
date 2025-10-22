@@ -1,35 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { analyticsDb } from '@/lib/db';
 
-const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const userId = body.userId;
 
-    const now = Date.now();
-    const timeframe = new Date(now - 24 * 60 * 60 * 1000);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    // 3. Aggregate time spent per language for this user in the last 24 hours
-    const languageAggregation = await prisma.timeEntry.groupBy({
-      by: ['language'],
+    // Get daily stats for today
+    const dailyStats = await analyticsDb.dailyStats.findFirst({
       where: {
         userId: userId,
-        timestamp: {
-          gte: timeframe,
-        },
-      },
-      _sum: {
-        timeSpent: true,
+        date: today,
       },
     });
 
-    // 4. Prepare the response data and sort by time spent
-    const languages = languageAggregation
-      .map(entry => ({
-        language: entry.language,
-        timeSpent: entry._sum.timeSpent ?? 0,
+    // Extract languages from JSON and convert to array
+    const languagesData = dailyStats?.languages as Record<string, number> || {};
+    const languages = Object.entries(languagesData)
+      .map(([language, timeSpent]) => ({
+        language,
+        timeSpent,
       }))
       .sort((a, b) => b.timeSpent - a.timeSpent); // Sort in descending order
 

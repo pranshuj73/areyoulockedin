@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { getIngestDb, analyticsDb } from '@/lib/db';
 import { getLanguage } from '@/lib/language';
-
-const prisma = new PrismaClient();
+import { AGGREGATION_CONFIG, getSessionCacheExpiry } from '@/lib/config';
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,7 +17,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid timestamp received.' }, { status: 400 });
     }
 
-    if (timeSpent < 0 || timeSpent > 5) {
+    if (timeSpent < 0 || timeSpent > AGGREGATION_CONFIG.MAX_TIME_PER_EVENT) {
       return NextResponse.json({ error: 'Invalid time chunk received.' }, { status: 400 });
     }
 
@@ -29,46 +28,84 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: `Unsupported file extension [Language could not be inferred]: ${extension}` }, { status: 400 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: {
-        sessionKey,
-        banned: false
-      },
+    // Check session cache in IngestDB first (faster)
+    const ingestDb = await getIngestDb();
+    const sessionCache = await ingestDb.sessionCache.findUnique({
+      where: { sessionKey },
     });
 
-    if (!user) {
-      console.log("Invalid session key", sessionKey)
-      return NextResponse.json({ error: 'Invalid session key' }, { status: 401 });
+    let userId: string;
+    let username: string;
+
+    if (!sessionCache || sessionCache.banned || sessionCache.expiresAt < new Date()) {
+      // Session not found or expired, check AnalyticsDB for user data
+      const user = await analyticsDb.user.findUnique({
+        where: {
+          sessionKey,
+          banned: false
+        },
+      });
+
+      if (!user) {
+        console.log("Invalid session key", sessionKey);
+        return NextResponse.json({ error: 'Invalid session key' }, { status: 401 });
+      }
+
+      userId = user.id;
+      username = user.username;
+
+      // Update session cache
+      await ingestDb.sessionCache.upsert({
+        where: { sessionKey },
+        create: {
+          sessionKey,
+          userId: user.id,
+          username: user.username,
+          banned: user.banned,
+          expiresAt: getSessionCacheExpiry(),
+        },
+        update: {
+          userId: user.id,
+          username: user.username,
+          banned: user.banned,
+          expiresAt: getSessionCacheExpiry(),
+        },
+      });
+    } else {
+      userId = sessionCache.userId;
+      username = sessionCache.username;
     }
 
     const roundedTimeSpent = Math.ceil(parseFloat(timeSpent) * 100) / 100;
 
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-    const entriesInLastHour = await prisma.timeEntry.aggregate({
+    const entriesInLastHour = await ingestDb.activityEvent.aggregate({
       _sum: { timeSpent: true },
       where: {
-        userId: user.id,
+        userId: userId,
         timestamp: { gte: oneHourAgo },
       },
     });
     const totalTimeInLastHour = entriesInLastHour._sum.timeSpent || 0;
 
-    if (totalTimeInLastHour + roundedTimeSpent > 60) { // Max 60 minutes of activity in any 60 min window
-      console.log(`User ${user.id} exceeded time limit in last hour.`);
+    if (totalTimeInLastHour + roundedTimeSpent > AGGREGATION_CONFIG.MAX_TIME_PER_HOUR) { // Max time per hour from config
+      console.log(`User ${userId} exceeded time limit in last hour.`);
       return NextResponse.json({ error: 'Time logging limit exceeded for the period.' }, { status: 429 });
     }
 
-    const timeEntry = await prisma.timeEntry.create({
+    // Write to IngestDB (Turso) for fast ingestion
+    const activityEvent = await ingestDb.activityEvent.create({
       data: {
-        userId: user.id,
+        userId: userId,
         sessionKey,
         timeSpent: roundedTimeSpent,
-        language: language, // Use the sent language directly
+        language: language,
+        extension: extension,
         timestamp: new Date(timestamp),
       },
     });
 
-    return NextResponse.json({ message: 'Time recorded', timeEntry }, { status: 200 });
+    return NextResponse.json({ message: 'Time recorded', activityEvent }, { status: 200 });
   } catch (error) {
     console.error('Error saving time entry:', error);
     return NextResponse.json({ error: 'Failed to save time data' }, { status: 500 });

@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/ingest"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev-ingest.db"
+}
+
+// Raw activity events - high frequency writes
+model ActivityEvent {
+  id          String   @id @default(cuid())
+  userId      String   // Clerk user ID
+  sessionKey  String   // Session key for validation
+  timeSpent   Float    // Time spent in minutes
+  language    String   // Programming language
+  extension   String   // File extension
+  timestamp   DateTime // When the event occurred
+  createdAt   DateTime @default(now()) // When the record was created
+  
+  @@index([userId, timestamp])
+  @@index([sessionKey])
+  @@index([createdAt]) // For cleanup operations
+}
+
+// Session validation cache - short-lived
+model SessionCache {
+  sessionKey String   @id
+  userId     String   // Clerk user ID
+  username   String   // Username for quick lookups
+  banned     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime // TTL for cache cleanup
+  
+  @@index([userId])
+  @@index([expiresAt]) // For cleanup operations
+}

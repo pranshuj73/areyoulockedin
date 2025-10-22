@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { analyticsDb } from '@/lib/db';
 import { currentUser } from '@clerk/nextjs/server';
-
-const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,7 +11,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
     }
 
-    const dbUser = await prisma.user.findUnique({
+    const dbUser = await analyticsDb.user.findUnique({
       where: { id: userId },
     });
 

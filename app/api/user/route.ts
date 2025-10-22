@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { analyticsDb } from '@/lib/db';
 
-const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,7 +10,7 @@ export async function POST(request: NextRequest) {
     console.log(username)
 
     // 1. Find the user by username (twitter handle)
-    const user = await prisma.user.findUnique({
+    const user = await analyticsDb.user.findUnique({
       where: { username },
       select: {
         id: true,
