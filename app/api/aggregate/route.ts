@@ -2,8 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { aggregateActivityData, cleanupSessionCache } from '@/lib/aggregation';
 
 /**
- * Aggregation endpoint - should be called by a cron job every 5-10 minutes
+ * Aggregation endpoint - called by Cloudflare Worker every 15 minutes
  * This processes raw events from IngestDB and writes aggregated data to AnalyticsDB
+ * 
+ * Note: This endpoint is excluded from rate limiting in middleware.ts
+ * Authentication via Bearer token (AGGREGATION_TOKEN env var)
  */
 export async function POST(request: NextRequest) {
   try {
