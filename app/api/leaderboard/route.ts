@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
       totalHeartbeatsReceived = aggregatedData.reduce((sum, stat) => sum + stat.heartbeats, 0);
     } else {
       // Get daily aggregated data
-      const today = new Date();
+      const today = new Date(timeframe);
       today.setHours(0, 0, 0, 0);
       
       aggregatedData = await analyticsDb.dailyStats.findMany({
